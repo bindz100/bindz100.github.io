@@ -11,55 +11,50 @@
       font-family: Arial, sans-serif;
     }
 
-    /* Nút hình tròn nổi */
+    /* Nút tròn nổi */
     #floatingBtn {
       position: absolute;
       top: 30px;
       left: 30px;
-      width: 50px;
-      height: 50px;
+      width: 70px;
+      height: 70px;
       background-color: #00bcd4;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
       color: white;
-      font-size: 24px;
+      font-size: 32px;
       cursor: grab;
       z-index: 999;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
       user-select: none;
-      transition: background 0.2s;
     }
 
-    #floatingBtn:hover {
-      background-color: #0097a7;
-    }
-
-    /* Menu hiện ra khi bấm */
+    /* Menu hiện ra */
     #menuContent {
       position: absolute;
-      top: 90px;
+      top: 110px;
       left: 30px;
       background: rgba(0, 0, 0, 0.85);
       padding: 15px;
-      border-radius: 10px;
+      border-radius: 12px;
       display: none;
       flex-direction: column;
       gap: 10px;
       z-index: 998;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
 
     #menuContent button {
-      padding: 10px 15px;
+      padding: 12px 18px;
       background-color: #ff5252;
       border: none;
       color: white;
       font-size: 16px;
       border-radius: 6px;
       cursor: pointer;
-      width: 150px;
+      width: 160px;
     }
 
     #menuContent button:hover {
@@ -77,10 +72,10 @@
 </head>
 <body>
 
-<!-- Nút hình tròn nổi -->
-<div id="floatingBtn" title="Mở menu">☰</div>
+<!-- Nút tròn nổi -->
+<div id="floatingBtn" title="Menu">☰</div>
 
-<!-- Nội dung menu -->
+<!-- Menu ẩn -->
 <div id="menuContent">
   <button onclick="resetPage()">🔄 Reset trang</button>
   <button class="secondary" onclick="openNewTab()">🆕 Mở tab mới</button>
@@ -92,49 +87,68 @@
 
   let isDragging = false;
   let offsetX = 0, offsetY = 0;
+  let moved = false;
 
-  // Bắt đầu kéo
-  btn.addEventListener("mousedown", (e) => {
+  // Bắt đầu kéo (chuột & cảm ứng)
+  const startDrag = (e) => {
     isDragging = true;
-    offsetX = e.clientX - btn.offsetLeft;
-    offsetY = e.clientY - btn.offsetTop;
-    btn.style.cursor = "grabbing";
-  });
+    moved = false;
 
-  // Di chuyển khi kéo
-  document.addEventListener("mousemove", (e) => {
-    if (isDragging) {
-      const x = e.clientX - offsetX;
-      const y = e.clientY - offsetY;
-      btn.style.left = `${x}px`;
-      btn.style.top = `${y}px`;
+    const evt = e.touches ? e.touches[0] : e;
+    offsetX = evt.clientX - btn.offsetLeft;
+    offsetY = evt.clientY - btn.offsetTop;
 
-      menu.style.left = `${x}px`;
-      menu.style.top = `${y + 60}px`;
-    }
-  });
+    document.addEventListener('mousemove', onDrag);
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchmove', onDrag);
+    document.addEventListener('touchend', endDrag);
+  };
 
-  // Thả nút
-  document.addEventListener("mouseup", () => {
+  // Kéo di chuyển
+  const onDrag = (e) => {
+    if (!isDragging) return;
+
+    const evt = e.touches ? e.touches[0] : e;
+    const x = evt.clientX - offsetX;
+    const y = evt.clientY - offsetY;
+
+    btn.style.left = `${x}px`;
+    btn.style.top = `${y}px`;
+
+    menu.style.left = `${x}px`;
+    menu.style.top = `${y + 80}px`;
+
+    moved = true;
+  };
+
+  // Kết thúc kéo
+  const endDrag = () => {
     isDragging = false;
-    btn.style.cursor = "grab";
-  });
 
-  // Toggle menu khi bấm
+    document.removeEventListener('mousemove', onDrag);
+    document.removeEventListener('mouseup', endDrag);
+    document.removeEventListener('touchmove', onDrag);
+    document.removeEventListener('touchend', endDrag);
+  };
+
+  // Toggle menu khi click (chỉ nếu không kéo)
   btn.addEventListener("click", () => {
-    if (!isDragging) {
+    if (!moved) {
       menu.style.display = (menu.style.display === "none") ? "flex" : "none";
     }
   });
 
-  // Reset trang
+  // Kéo chuột và cảm ứng
+  btn.addEventListener("mousedown", startDrag);
+  btn.addEventListener("touchstart", startDrag);
+
+  // Nút chức năng
   function resetPage() {
     location.reload();
   }
 
-  // Mở tab mới giống trang hiện tại
   function openNewTab() {
-    window.open(window.location.href, '_blank');
+    window.open(window.location.href, "_blank");
   }
 </script>
 
