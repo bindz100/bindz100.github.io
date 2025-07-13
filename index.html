@@ -5,48 +5,100 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Welcome to Bindz</title>
   <style>
-    /* Nền xanh mây nhẹ với chuyển động gradient */
+    /* Nền bầu trời + mây bay */
     body {
       margin: 0;
       padding: 0;
       height: 100vh;
-      background: linear-gradient(-45deg, #a1c4fd, #c2e9fb, #a1c4fd, #c2e9fb);
-      background-size: 400% 400%;
-      animation: cloudBG 20s ease infinite;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to top, #a8edea, #fed6e3); /* sáng + dịu */
       overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    @keyframes cloudBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* Mây bay */
+    .cloud {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      opacity: 0.5;
+      animation: floatClouds 60s linear infinite;
+    }
+
+    .cloud::before, .cloud::after {
+      content: '';
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    .cloud1 {
+      width: 200px;
+      height: 60px;
+      top: 100px;
+      left: -250px;
+      animation-delay: 0s;
+    }
+
+    .cloud2 {
+      width: 150px;
+      height: 50px;
+      top: 200px;
+      left: -200px;
+      animation-delay: 20s;
+    }
+
+    .cloud3 {
+      width: 250px;
+      height: 70px;
+      top: 300px;
+      left: -300px;
+      animation-delay: 40s;
+    }
+
+    .cloud::before {
+      width: 100px;
+      height: 100px;
+      top: -25px;
+      left: 25px;
+    }
+
+    .cloud::after {
+      width: 120px;
+      height: 120px;
+      top: -40px;
+      left: 90px;
+    }
+
+    @keyframes floatClouds {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(120vw); }
+    }
+
+    /* Chữ */
+    .header {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
     }
 
     .welcome-text {
       font-size: 3em;
-      color: #ffffff;
+      color: #2c3e50;
       text-shadow:
-        0 0 5px #fff,
-        0 0 10px #9cf,
-        0 0 20px #9cf;
+        0 2px 5px rgba(255,255,255,0.6);
       opacity: 0;
-      animation: fadeInUp 1.8s ease forwards;
+      animation: fadeInUp 1.5s ease forwards;
     }
 
     .to-bindz-text {
       font-size: 2.5em;
-      color: #ffffff;
+      color: #2c3e50;
       text-shadow:
-        0 0 5px #fff,
-        0 0 10px #aaf,
-        0 0 20px #aaf;
+        0 2px 5px rgba(255,255,255,0.6);
       opacity: 0;
-      animation: fadeInUp 2s ease forwards;
+      animation: fadeInUp 1.5s ease forwards;
       animation-delay: 2s;
     }
 
@@ -63,7 +115,17 @@
   </style>
 </head>
 <body>
-  <div class="welcome-text">Welcome</div>
-  <div class="to-bindz-text">To Bindz</div>
+
+  <!-- Mây -->
+  <div class="cloud cloud1"></div>
+  <div class="cloud cloud2"></div>
+  <div class="cloud cloud3"></div>
+
+  <!-- Chữ -->
+  <div class="header">
+    <div class="welcome-text">Welcome</div>
+    <div class="to-bindz-text">To Bindz</div>
+  </div>
+
 </body>
 </html>
