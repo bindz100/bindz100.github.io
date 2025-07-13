@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Giả Lập Lái Xe Điện</title>
+
+  <!-- Font VT323 -->
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      font-family: 'VT323', monospace;
+    }
+
+    .dashboard {
+      background: rgba(0, 0, 0, 0.65);
+      padding: 40px 60px;
+      border-radius: 20px;
+      color: #00ff44;
+      text-align: center;
+      box-shadow:
+        0 0 20px #00ff44aa,
+        inset 0 0 10px #00ff44aa;
+      text-shadow:
+        0 0 4px #00ff44,
+        0 0 8px #00ff44aa;
+    }
+
+    .dashboard .label {
+      font-size: 26px;
+      margin-bottom: 10px;
+      color: #aaffcc;
+    }
+
+    .dashboard .value {
+      font-size: 64px;
+      margin-bottom: 30px;
+    }
+
+    .dashboard .unit {
+      font-size: 28px;
+      color: #aaffcc;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard">
+    <div class="label">Tốc độ</div>
+    <div class="value"><span id="speed">0</span><span class="unit"> km/h</span></div>
+
+    <div class="label">Pin còn lại</div>
+    <div class="value"><span id="battery">100</span><span class="unit"> %</span></div>
+  </div>
+
+  <script>
+    let speed = 0;
+    let battery = 100;
+
+    const speedElem = document.getElementById('speed');
+    const batteryElem = document.getElementById('battery');
+
+    const interval = setInterval(() => {
+      if (speed < 120) speed += 2;
+      if (battery > 0) battery -= 0.9;
+
+      speedElem.textContent = speed;
+      batteryElem.textContent = Math.max(Math.floor(battery), 0);
+
+      if (battery <= 0) clearInterval(interval);
+    }, 150);
+  </script>
+
+</body>
+</html>
