@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kết Quả - Bindz</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Rubik Mono One', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+    h1 {
+      font-size: 26px;
+      color: #00ffe0;
+      margin-bottom: 30px;
+      animation: glowText 3s ease-in-out infinite;
+      text-align: center;
+    }
+    @keyframes glowText {
+      0%, 100% { text-shadow: 0 0 8px #00ffe0; }
+      50% { text-shadow: 0 0 16px #00ffff; }
+    }
+    .key-box {
+      background: rgba(255,255,255,0.05);
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(0,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+      backdrop-filter: blur(6px);
+    }
+    .key-code {
+      font-size: 20px;
+      color: #ffffffee;
+      margin-bottom: 20px;
+      word-break: break-all;
+      text-shadow: 0 0 4px #00ffff;
+    }
+    .copy-btn {
+      font-size: 16px;
+      padding: 12px 24px;
+      border: 2px solid #00ffe0;
+      border-radius: 10px;
+      background: rgba(0,255,255,0.1);
+      color: #00ffe0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0,255,255,0.4);
+    }
+    .copy-btn:hover {
+      background: rgba(0,255,255,0.25);
+      color: #fff;
+      box-shadow: 0 0 20px #00ffe0;
+    }
+    #lockBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 20px;
+      padding: 10px 14px;
+      background: rgba(0,255,255,0.15);
+      border: 2px solid #00ffe0;
+      border-radius: 50%;
+      color: #00ffe0;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 0 10px rgba(0,255,255,0.5);
+      transition: all 0.3s ease;
+    }
+    #lockBtn:hover {
+      background: rgba(0,255,255,0.3);
+      color: #fff;
+      box-shadow: 0 0 15px #00ffe0;
+    }
+    #verifyBox {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.85);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,255,255,0.4);
+      z-index: 99999;
+      text-align: center;
+    }
+    #verifyBox input {
+      font-size: 18px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    #verifyBox button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #00ffe0;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔑 Key 24h của bạn</h1>
+  <div class="key-box">
+    <div class="key-code" id="keyText">BINDZ-24H--shjwi188cbakajdb</div>
+    <button class="copy-btn" onclick="copyKey()">📋 Copy</button>
+  </div>
+
+  <button id="lockBtn" title="Nhập key để vào giao diện chính 🔒">🔒</button>
+
+  <div id="verifyBox">
+    <input type="text" id="verifyInput" placeholder="Nhập key để vào">
+    <br>
+    <button onclick="verify()">Gửi</button>
+  </div>
+
+  <script>
+    function copyKey() {
+      const key = document.getElementById("keyText").innerText;
+      navigator.clipboard.writeText(key).then(() => {
+        alert("✅ Đã sao chép key!");
+      }).catch(() => {
+        alert("⚠️ Không thể sao chép. Hãy thử lại.");
+      });
+    }
+
+    document.getElementById("lockBtn").addEventListener("click", () => {
+      document.getElementById("verifyBox").style.display = "block";
+    });
+
+    function verify() {
+      const inputKey = document.getElementById("verifyInput").value.trim();
+      if (inputKey === "BINDZ-24H--shjwi188cbakajdb") {
+        localStorage.setItem("bindz_key_verified", "yes");
+        alert("✅ Đúng key! Đang vào...");
+        window.location.href = "main.html";
+      } else {
+        alert("❌ Key sai!");
+      }
+    }
+  </script>
+</body>
+</html>
