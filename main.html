@@ -2,107 +2,138 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>ChatGPT Mini Bot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Thông Minh - VIP</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
+
     body {
-      font-family: Arial, sans-serif;
-      background: #121212;
-      color: #fff;
       margin: 0;
       padding: 0;
+      font-family: 'Rubik Mono One', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
     }
-    #chat {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px;
+
+    h1 {
+      color: #00ffe0;
+      font-size: 28px;
+      margin-bottom: 20px;
+      animation: glow 3s ease-in-out infinite;
     }
-    .msg { margin-bottom: 12px; }
-    .user { color: #00f0ff; }
-    .bot { color: #00ff88; }
-    #form {
-      display: flex;
-      padding: 10px;
-      background: #1f1f1f;
+
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 8px #00ffe0; }
+      50% { text-shadow: 0 0 16px #00ffff; }
     }
-    #input {
-      flex: 1;
-      padding: 10px;
+
+    textarea {
+      width: 90%;
+      max-width: 500px;
+      height: 100px;
       font-size: 16px;
-      border: none;
-      border-radius: 4px;
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid #00ffe0;
+      background: #111;
+      color: #00ffe0;
+      resize: none;
+      margin-bottom: 12px;
+      outline: none;
     }
-    #send {
-      padding: 10px 20px;
+
+    button {
+      padding: 12px 24px;
       font-size: 16px;
-      background: #00ff88;
-      border: none;
-      border-radius: 4px;
-      margin-left: 10px;
+      background: rgba(0,255,255,0.1);
+      border: 2px solid #00ffe0;
+      border-radius: 10px;
+      color: #00ffe0;
       cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 12px rgba(0,255,255,0.4);
+    }
+
+    button:hover {
+      background: rgba(0,255,255,0.3);
+      color: #fff;
+    }
+
+    #response {
+      margin-top: 20px;
+      max-width: 90%;
+      width: 500px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 16px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      backdrop-filter: blur(6px);
+    }
+
+    audio {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-<div id="chat"></div>
+  <h1>🤖 AI Thông Minh - VIP Pro</h1>
 
-<form id="form">
-  <input type="text" id="input" placeholder="Nhập câu hỏi..." autocomplete="off" />
-  <button type="submit" id="send">Gửi</button>
-</form>
+  <textarea id="userInput" placeholder="Nhập câu hỏi cho AI..."></textarea>
+  <button onclick="sendMessage()">Gửi 🧠</button>
 
-<script>
-const apiKey = "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"; // ❗️Thay key của bạn tại đây (nguy hiểm nếu public)
+  <div id="response"></div>
 
-const chat = document.getElementById("chat");
-const form = document.getElementById("form");
-const input = document.getElementById("input");
+  <!-- Nhạc nền tự động -->
+  <audio autoplay loop>
+    <source src="nhac.mp3" type="audio/mpeg">
+  </audio>
 
-form.onsubmit = async (e) => {
-  e.preventDefault();
-  const userText = input.value.trim();
-  if (!userText) return;
+  <script>
+    const apiKey = "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";
 
-  addMessage("Bạn", userText, "user");
-  input.value = "";
-  addMessage("Bot", "Đang trả lời...", "bot", true);
+    async function sendMessage() {
+      const input = document.getElementById("userInput").value.trim();
+      if (!input) return;
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + apiKey
-    },
-    body: JSON.stringify({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: userText }],
-      temperature: 0.7
-    })
-  });
+      document.getElementById("response").innerText = "⏳ Đang phản hồi...";
 
-  const data = await response.json();
-  const botReply = data.choices?.[0]?.message?.content || "❌ Lỗi khi phản hồi!";
-  removeTyping();
-  addMessage("Bot", botReply, "bot");
-};
+      const payload = {
+        model: "gpt-3.5-turbo",
+        messages: [
+          { role: "user", content: input }
+        ]
+      };
 
-function addMessage(sender, text, cls, isTyping = false) {
-  const msg = document.createElement("div");
-  msg.className = "msg " + cls;
-  msg.innerHTML = `<b>${sender}:</b> ${text}`;
-  msg.dataset.typing = isTyping ? "true" : "false";
-  chat.appendChild(msg);
-  chat.scrollTop = chat.scrollHeight;
-}
+      try {
+        const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://api.openai.com/v1/chat/completions");
 
-function removeTyping() {
-  const msgs = chat.querySelectorAll('[data-typing="true"]');
-  msgs.forEach(m => m.remove());
-}
-</script>
+        const res = await fetch(proxyUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apiKey}`
+          },
+          body: JSON.stringify(payload)
+        });
 
+        const data = await res.json();
+        const message = data.choices?.[0]?.message?.content || "❌ Không có phản hồi.";
+
+        document.getElementById("response").innerText = message;
+
+      } catch (err) {
+        document.getElementById("response").innerText = "❌ Lỗi khi phản hồi!";
+        console.error(err);
+      }
+    }
+  </script>
 </body>
 </html>
