@@ -4,15 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Welcome to Bindz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
   <style>
-    /* Nền bầu trời + mây bay */
+    /* Nền xanh mây + mây bay */
     body {
       margin: 0;
       padding: 0;
       height: 100vh;
-      background: linear-gradient(to top, #a8edea, #fed6e3); /* sáng + dịu */
+      background: linear-gradient(to top, #a8edea, #fed6e3);
+      background-size: 400% 400%;
+      animation: cloudBG 20s ease infinite;
+      font-family: 'Playfair Display', serif;
       overflow: hidden;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    @keyframes cloudBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
     }
 
     /* Mây bay */
@@ -20,7 +29,7 @@
       position: absolute;
       background: #fff;
       border-radius: 50%;
-      opacity: 0.5;
+      opacity: 0.4;
       animation: floatClouds 60s linear infinite;
     }
 
@@ -74,42 +83,41 @@
       100% { transform: translateX(120vw); }
     }
 
-    /* Chữ */
+    /* Chữ đẹp đỉnh cao */
     .header {
       position: absolute;
-      top: 50px;
+      top: 40px;
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
     }
 
-    .welcome-text {
+    .text {
       font-size: 3em;
-      color: #2c3e50;
+      color: #ffffff;
+      letter-spacing: 1.5px;
       text-shadow:
-        0 2px 5px rgba(255,255,255,0.6);
+        0 0 5px #ffffffaa,
+        0 0 10px #a3d5ff,
+        0 0 20px #89cfff,
+        0 2px 8px rgba(0, 0, 0, 0.2);
       opacity: 0;
-      animation: fadeInUp 1.5s ease forwards;
+      animation: fadeUp 1.5s ease forwards;
     }
 
-    .to-bindz-text {
+    .text.to {
       font-size: 2.5em;
-      color: #2c3e50;
-      text-shadow:
-        0 2px 5px rgba(255,255,255,0.6);
-      opacity: 0;
-      animation: fadeInUp 1.5s ease forwards;
-      animation-delay: 2s;
+      animation-delay: 1.8s;
     }
 
-    @keyframes fadeInUp {
+    @keyframes fadeUp {
       0% {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(30px) scale(0.95);
       }
       100% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
       }
     }
   </style>
@@ -123,8 +131,8 @@
 
   <!-- Chữ -->
   <div class="header">
-    <div class="welcome-text">Welcome</div>
-    <div class="to-bindz-text">To Bindz</div>
+    <div class="text welcome">Welcome</div>
+    <div class="text to">To Bindz</div>
   </div>
 
 </body>
