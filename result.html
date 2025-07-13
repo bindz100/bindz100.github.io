@@ -2,16 +2,16 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Menu Nổi Di Chuyển</title>
+  <title>Menu Nổi Kéo Không Mất</title>
   <style>
     body {
       margin: 0;
       height: 100vh;
       background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
       font-family: Arial, sans-serif;
+      overflow: hidden;
     }
 
-    /* Nút tròn nổi */
     #floatingBtn {
       position: absolute;
       top: 30px;
@@ -31,7 +31,6 @@
       user-select: none;
     }
 
-    /* Menu hiện ra */
     #menuContent {
       position: absolute;
       top: 110px;
@@ -72,10 +71,8 @@
 </head>
 <body>
 
-<!-- Nút tròn nổi -->
 <div id="floatingBtn" title="Menu">☰</div>
 
-<!-- Menu ẩn -->
 <div id="menuContent">
   <button onclick="resetPage()">🔄 Reset trang</button>
   <button class="secondary" onclick="openNewTab()">🆕 Mở tab mới</button>
@@ -89,7 +86,6 @@
   let offsetX = 0, offsetY = 0;
   let moved = false;
 
-  // Bắt đầu kéo (chuột & cảm ứng)
   const startDrag = (e) => {
     isDragging = true;
     moved = false;
@@ -100,17 +96,22 @@
 
     document.addEventListener('mousemove', onDrag);
     document.addEventListener('mouseup', endDrag);
-    document.addEventListener('touchmove', onDrag);
+    document.addEventListener('touchmove', onDrag, { passive: false });
     document.addEventListener('touchend', endDrag);
   };
 
-  // Kéo di chuyển
   const onDrag = (e) => {
     if (!isDragging) return;
 
     const evt = e.touches ? e.touches[0] : e;
-    const x = evt.clientX - offsetX;
-    const y = evt.clientY - offsetY;
+    const maxX = window.innerWidth - btn.offsetWidth;
+    const maxY = window.innerHeight - btn.offsetHeight;
+
+    let x = evt.clientX - offsetX;
+    let y = evt.clientY - offsetY;
+
+    x = Math.max(0, Math.min(x, maxX));
+    y = Math.max(0, Math.min(y, maxY));
 
     btn.style.left = `${x}px`;
     btn.style.top = `${y}px`;
@@ -119,30 +120,27 @@
     menu.style.top = `${y + 80}px`;
 
     moved = true;
+
+    e.preventDefault(); // ngăn cuộn khi kéo trên mobile
   };
 
-  // Kết thúc kéo
   const endDrag = () => {
     isDragging = false;
-
     document.removeEventListener('mousemove', onDrag);
     document.removeEventListener('mouseup', endDrag);
     document.removeEventListener('touchmove', onDrag);
     document.removeEventListener('touchend', endDrag);
   };
 
-  // Toggle menu khi click (chỉ nếu không kéo)
   btn.addEventListener("click", () => {
     if (!moved) {
       menu.style.display = (menu.style.display === "none") ? "flex" : "none";
     }
   });
 
-  // Kéo chuột và cảm ứng
   btn.addEventListener("mousedown", startDrag);
   btn.addEventListener("touchstart", startDrag);
 
-  // Nút chức năng
   function resetPage() {
     location.reload();
   }
