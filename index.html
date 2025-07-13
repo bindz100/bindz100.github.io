@@ -4,8 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Welcome to Bindz</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+  <!-- Font chữ đẹp -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Orbitron:wght@500&display=swap" rel="stylesheet">
+
   <style>
+    /* Nền chuyển động */
     body {
       margin: 0;
       padding: 0;
@@ -23,6 +27,7 @@
       100% {background-position: 0% 50%;}
     }
 
+    /* Mây */
     .cloud {
       position: absolute;
       background: #fff;
@@ -50,6 +55,7 @@
       100% { transform: translateX(120vw); }
     }
 
+    /* Chữ Welcome / To Bindz */
     .header {
       position: absolute;
       top: 60px;
@@ -87,6 +93,7 @@
       }
     }
 
+    /* Nút Bắt Đầu */
     .start-btn {
       position: absolute;
       top: 300px;
@@ -147,7 +154,7 @@
       }
     }
 
-    /* LOADING BAR */
+    /* Loading bar */
     .loading-container {
       position: absolute;
       top: 370px;
@@ -174,7 +181,8 @@
     }
 
     #loadingText {
-      font-size: 14px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 16px;
       color: white;
       font-weight: bold;
       text-shadow: 0 0 3px #000;
@@ -184,28 +192,28 @@
 </head>
 <body>
 
-  <!-- MÂY -->
+  <!-- Mây -->
   <div class="cloud cloud1"></div>
   <div class="cloud cloud2"></div>
   <div class="cloud cloud3"></div>
 
-  <!-- CHỮ -->
+  <!-- Chữ tiêu đề -->
   <div class="header">
     <div class="text welcome">Welcome</div>
     <div class="text to">To Bindz</div>
   </div>
 
-  <!-- NÚT BẮT ĐẦU -->
+  <!-- Nút bắt đầu -->
   <button class="start-btn" onclick="startApp()">Bắt Đầu 😈</button>
 
-  <!-- LOADING BAR -->
+  <!-- Thanh loading -->
   <div class="loading-container" id="loadingContainer">
     <div class="loading-bar" id="loadingBar">
       <span id="loadingText">0%</span>
     </div>
   </div>
 
-  <!-- SCRIPT -->
+  <!-- Script xử lý -->
   <script>
     function startApp() {
       // Ẩn nút
@@ -224,7 +232,7 @@
         text.textContent = percent + '%';
         if (percent >= 100) {
           clearInterval(interval);
-          window.location.href = "result.html"; // ← Chuyển trang
+          window.location.href = "result.html";
         }
       }, 100); // 100ms x 100 = 10 giây
     }
