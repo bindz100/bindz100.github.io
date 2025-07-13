@@ -6,7 +6,7 @@
   <title>Welcome to Bindz</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
   <style>
-    /* Nền xanh mây + mây bay */
+    /* NỀN MÂY XANH ĐỘNG */
     body {
       margin: 0;
       padding: 0;
@@ -24,7 +24,6 @@
       100% {background-position: 0% 50%;}
     }
 
-    /* Mây bay */
     .cloud {
       position: absolute;
       background: #fff;
@@ -40,60 +39,29 @@
       border-radius: 50%;
     }
 
-    .cloud1 {
-      width: 200px;
-      height: 60px;
-      top: 100px;
-      left: -250px;
-      animation-delay: 0s;
-    }
+    .cloud1 { width: 200px; height: 60px; top: 100px; left: -250px; animation-delay: 0s; }
+    .cloud2 { width: 150px; height: 50px; top: 200px; left: -200px; animation-delay: 20s; }
+    .cloud3 { width: 250px; height: 70px; top: 300px; left: -300px; animation-delay: 40s; }
 
-    .cloud2 {
-      width: 150px;
-      height: 50px;
-      top: 200px;
-      left: -200px;
-      animation-delay: 20s;
-    }
-
-    .cloud3 {
-      width: 250px;
-      height: 70px;
-      top: 300px;
-      left: -300px;
-      animation-delay: 40s;
-    }
-
-    .cloud::before {
-      width: 100px;
-      height: 100px;
-      top: -25px;
-      left: 25px;
-    }
-
-    .cloud::after {
-      width: 120px;
-      height: 120px;
-      top: -40px;
-      left: 90px;
-    }
+    .cloud::before { width: 100px; height: 100px; top: -25px; left: 25px; }
+    .cloud::after { width: 120px; height: 120px; top: -40px; left: 90px; }
 
     @keyframes floatClouds {
       0% { transform: translateX(0); }
       100% { transform: translateX(120vw); }
     }
 
-    /* Chữ đẹp đỉnh cao */
+    /* CHỮ WELCOME TO BINDZ */
     .header {
       position: absolute;
-      top: 40px;
+      top: 60px;
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
     }
 
     .text {
-      font-size: 3em;
+      font-size: 2.5em;
       color: #ffffff;
       letter-spacing: 1.5px;
       text-shadow:
@@ -106,7 +74,7 @@
     }
 
     .text.to {
-      font-size: 2.5em;
+      font-size: 2.2em;
       animation-delay: 1.8s;
     }
 
@@ -120,20 +88,91 @@
         transform: translateY(0) scale(1);
       }
     }
+
+    /* NÚT BẮT ĐẦU 😈 */
+    .start-btn {
+      position: absolute;
+      top: 300px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 14px 36px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      background: linear-gradient(120deg, #6a11cb, #2575fc);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      animation: fadeInBtn 1s ease forwards;
+      animation-delay: 3.5s;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .start-btn::before {
+      content: "";
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(270deg, #00f2fe, #4facfe, #00f2fe);
+      background-size: 600% 600%;
+      z-index: -1;
+      border-radius: 14px;
+      animation: borderFlow 5s linear infinite;
+      filter: blur(8px);
+    }
+
+    .start-btn:hover {
+      transform: translateX(-50%) scale(1.05);
+      box-shadow: 0 0 18px rgba(79, 172, 254, 0.6);
+    }
+
+    @keyframes borderFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes fadeInBtn {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Mây -->
+  <!-- MÂY TRÔI -->
   <div class="cloud cloud1"></div>
   <div class="cloud cloud2"></div>
   <div class="cloud cloud3"></div>
 
-  <!-- Chữ -->
+  <!-- CHỮ -->
   <div class="header">
     <div class="text welcome">Welcome</div>
     <div class="text to">To Bindz</div>
   </div>
+
+  <!-- NÚT -->
+  <button class="start-btn" onclick="startApp()">Bắt Đầu 😈</button>
+
+  <script>
+    function startApp() {
+      // Chuyển trang sau khi nhấn nút (tùy bạn sửa lại link)
+      window.location.href = "result.html"; 
+    }
+  </script>
 
 </body>
 </html>
