@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kết quả - BINDZ VIP</title>
+  <title>Key 24H - Bindz</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
 
@@ -11,8 +11,8 @@
       margin: 0;
       padding: 0;
       font-family: 'Rubik Mono One', sans-serif;
-      background: radial-gradient(circle at center, #0f2027, #203a43, #2c5364);
-      color: #00ffe0;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -22,146 +22,139 @@
       position: relative;
     }
 
-    .key-box {
+    .glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0,255,255,0.2), transparent 70%);
+      border-radius: 50%;
+      animation: pulse 5s infinite ease-in-out;
+      z-index: 0;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.9); opacity: 0.3; }
+      50% { transform: scale(1.1); opacity: 0.7; }
+    }
+
+    .box {
+      z-index: 1;
       background: rgba(255, 255, 255, 0.05);
-      padding: 40px 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 50px;
       border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 0 0 20px rgba(0,255,255,0.3);
+      box-shadow: 0 0 30px rgba(0,255,255,0.3);
       text-align: center;
-      backdrop-filter: blur(6px);
-      animation: fadeIn 1s ease-out;
+      backdrop-filter: blur(8px);
     }
 
-    .key-text {
-      font-size: 18px;
-      margin-bottom: 15px;
-      color: #ffffffcc;
-      text-shadow: 0 0 8px #00ffe0;
-      animation: glow 2.5s infinite ease-in-out;
-    }
-
-    @keyframes glow {
-      0%, 100% { text-shadow: 0 0 8px #00ffe0; }
-      50% { text-shadow: 0 0 16px #00ffff; }
-    }
-
-    .key-code {
-      font-size: 20px;
-      background: rgba(0,255,255,0.1);
-      padding: 12px 20px;
-      border-radius: 12px;
-      display: inline-block;
+    h1 {
+      font-size: 24px;
       margin-bottom: 20px;
-      border: 2px dashed #00ffe0;
-      user-select: all;
+      color: #00ffe0;
+      text-shadow: 0 0 10px #00ffe0;
+      animation: glowText 3s infinite ease-in-out;
     }
 
-    button.copy-btn {
-      font-family: 'Rubik Mono One', sans-serif;
-      background: #00ffe0;
-      border: none;
-      color: #000;
+    @keyframes glowText {
+      0%, 100% { text-shadow: 0 0 10px #00ffe0; }
+      50% { text-shadow: 0 0 20px #00ffff; }
+    }
+
+    #keyDisplay {
+      font-size: 20px;
+      margin-top: 10px;
       padding: 12px 20px;
+      background: rgba(255,255,255,0.1);
       border-radius: 10px;
-      font-size: 14px;
-      cursor: pointer;
-      box-shadow: 0 0 15px rgba(0,255,255,0.4);
-      transition: 0.3s;
+      display: inline-block;
+      color: #00ffff;
+      text-shadow: 0 0 5px #00ffff;
+      user-select: all;
+      animation: popCount 1s infinite ease-in-out;
     }
 
-    button.copy-btn:hover {
-      background: #00ffff;
-      box-shadow: 0 0 25px #00ffff;
+    @keyframes popCount {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .btn {
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 16px;
+      border: 2px solid #00ffe0;
+      border-radius: 10px;
+      background: rgba(0,255,255,0.1);
+      color: #00ffe0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Rubik Mono One', sans-serif;
+      box-shadow: 0 0 15px rgba(0,255,255,0.3);
+    }
+
+    .btn:hover {
+      background: rgba(0,255,255,0.2);
+      color: #fff;
+      box-shadow: 0 0 20px #00ffe0;
     }
 
     .lock-btn {
       position: absolute;
       top: 20px;
       right: 20px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid #00ffe0;
+      font-size: 20px;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid #00ffe0;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      padding: 12px;
+      cursor: pointer;
       color: #00ffe0;
-      font-size: 18px;
-      cursor: pointer;
-      text-align: center;
-      line-height: 38px;
-      box-shadow: 0 0 12px rgba(0,255,255,0.3);
+      box-shadow: 0 0 10px #00ffe0;
+      transition: 0.3s;
     }
 
-    #key-input-area {
-      margin-top: 20px;
+    .lock-btn:hover {
+      background: rgba(0,255,255,0.2);
+    }
+
+    #keySection {
       display: none;
-    }
-
-    input#key-input {
-      padding: 10px;
-      font-size: 14px;
-      border: 1px solid #00ffe0;
-      border-radius: 8px;
-      background: #001;
-      color: #0ff;
-    }
-
-    button#submit-key {
-      margin-left: 10px;
-      padding: 10px 16px;
-      background: #0ff;
-      color: #000;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0; transform: scale(0.95);}
-      to {opacity: 1; transform: scale(1);}
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
+  <div class="glow"></div>
 
-  <button class="lock-btn" onclick="toggleKeyInput()">🔒</button>
+  <div class="lock-btn" onclick="enterKey()">🔒</div>
 
-  <div class="key-box">
-    <div class="key-text">🎉 Mã truy cập 24h của bạn:</div>
-    <div class="key-code" id="keyDisplay">BINDZ-24H--shjwi188cbakajdb</div><br/>
-    <button class="copy-btn" onclick="copyKey()">📋 Sao chép</button>
-
-    <div id="key-input-area">
-      <input type="text" id="key-input" placeholder="Nhập key để xác minh">
-      <button id="submit-key" onclick="checkKey()">Gửi</button>
+  <div class="box">
+    <h1>🔑 Mã truy cập 24H VIP</h1>
+    <div id="keySection">
+      <div id="keyDisplay">BINDZ-24H--shjwi188cbakajdb</div>
+      <br>
+      <button class="btn" onclick="copyKey()">📋 Sao chép key</button>
     </div>
   </div>
 
   <script>
-    const correctKey = "BINDZ-24H--shjwi188cbakajdb";
-
-    function toggleKeyInput() {
-      const inputArea = document.getElementById("key-input-area");
-      inputArea.style.display = inputArea.style.display === "block" ? "none" : "block";
+    function enterKey() {
+      const input = prompt("Nhập mã xác minh:");
+      if (input === "BINDZ-24H--shjwi188cbakajdb") {
+        document.getElementById("keySection").style.display = "block";
+        alert("✅ Key hợp lệ!");
+      } else {
+        alert("❌ Key sai. Vui lòng thử lại.");
+      }
     }
 
     function copyKey() {
-      const key = document.getElementById("keyDisplay").textContent;
+      const key = document.getElementById("keyDisplay").innerText;
       navigator.clipboard.writeText(key).then(() => {
-        alert("✅ Đã sao chép mã!");
+        alert("📋 Đã sao chép key!");
       });
     }
-
-    function checkKey() {
-      const input = document.getElementById("key-input").value.trim();
-      if (input === correctKey) {
-        alert("✅ Key đúng! Bạn đã xác minh thành công.");
-      } else {
-        alert("❌ Key sai, vui lòng thử lại.");
-      }
-    }
   </script>
-
 </body>
 </html>
