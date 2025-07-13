@@ -1,84 +1,139 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Giả Lập Lái Xe Điện</title>
-
-  <!-- Font VT323 -->
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Giả lập LED Vuông PEGA</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      font-family: 'VT323', monospace;
+    @font-face {
+      font-family: 'Digital7';
+      src: url('https://cdn.jsdelivr.net/gh/google/fonts/ofl/dsdigital/ds-digital.ttf') format('truetype');
     }
-
-    .dashboard {
-      background: rgba(0, 0, 0, 0.65);
-      padding: 40px 60px;
-      border-radius: 20px;
-      color: #00ff44;
-      text-align: center;
-      box-shadow:
-        0 0 20px #00ff44aa,
-        inset 0 0 10px #00ff44aa;
-      text-shadow:
-        0 0 4px #00ff44,
-        0 0 8px #00ff44aa;
+    @font-face {
+      font-family: 'Quicksand';
+      src: url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
     }
-
-    .dashboard .label {
-      font-size: 26px;
-      margin-bottom: 10px;
-      color: #aaffcc;
+    body{
+      margin:0;
+      padding:0;
+      background:linear-gradient(to bottom right,#0f2027,#203a43,#2c5364);
+      font-family:'Quicksand',sans-serif;
+      color:#fff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      flex-direction:column;
     }
-
-    .dashboard .value {
-      font-size: 64px;
-      margin-bottom: 30px;
+    .dashboard{
+      background:#111a20;
+      padding:30px 50px;
+      border-radius:20px;
+      box-shadow:0 0 15px rgba(0,255,255,0.2);
+      text-align:center;
+      width:300px;
     }
-
-    .dashboard .unit {
-      font-size: 28px;
-      color: #aaffcc;
+    .dashboard h1{
+      margin:0;
+      font-size:24px;
+      color:#00ffe0;
+    }
+    .speed{
+      font-size:64px;
+      font-family:'Digital7', monospace;
+      margin:10px 0;
+    }
+    .unit{
+      font-size:20px;
+      font-family:'Quicksand',sans-serif;
+    }
+    .info-row{
+      display:flex;
+      justify-content:space-between;
+      margin-top:10px;
+      font-size:18px;
+    }
+    .info-row .number{
+      font-family:'Digital7', monospace;
+    }
+    .controls{
+      margin-top:30px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .gas,.toggle{
+      padding:10px;
+      font-size:18px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+    }
+    .gas{
+      background:#009688;
+      color:#fff;
+    }
+    .gas:active{background:#00796b;}
+    .toggle{
+      background:#333;
+      color:#fff;
     }
   </style>
 </head>
 <body>
 
-  <div class="dashboard">
-    <div class="label">Tốc độ</div>
-    <div class="value"><span id="speed">0</span><span class="unit"> km/h</span></div>
-
-    <div class="label">Pin còn lại</div>
-    <div class="value"><span id="battery">100</span><span class="unit"> %</span></div>
+<div class="dashboard">
+  <h1>PEGA</h1>
+  <div class="speed"><span id="speed">0</span> <span class="unit">km/h</span></div>
+  <div class="info-row">
+    <div>🔋 <span id="battery" class="number">100%</span></div>
+    <div id="mode">Tiến</div>
   </div>
+  <div class="info-row">
+    <div id="clock">--:--</div>
+    <div>ODO: <span id="odo" class="number">0</span> km</div>
+  </div>
+</div>
 
-  <script>
-    let speed = 0;
-    let battery = 100;
+<div class="controls">
+  <button class="gas" onmousedown="startGas()" onmouseup="stopGas()" ontouchstart="startGas()" ontouchend="stopGas()">Giữ để chạy 🚀</button>
+  <button class="toggle" onclick="toggleMode()">Chuyển Tiến/Lùi</button>
+</div>
 
-    const speedElem = document.getElementById('speed');
-    const batteryElem = document.getElementById('battery');
+<script>
+let speed=0,battery=100,odo=0,isGasHeld=false,isReverse=false,batteryTimer=0;
+const speedEl=document.getElementById('speed'),
+      batteryEl=document.getElementById('battery'),
+      modeEl=document.getElementById('mode'),
+      odoEl=document.getElementById('odo'),
+      clockEl=document.getElementById('clock');
+function updateClock(){
+  const now=new Date(),h=String(now.getHours()).padStart(2,'0'),m=String(now.getMinutes()).padStart(2,'0');
+  clockEl.textContent=`${h}:${m}`;
+}
+setInterval(updateClock,1000);updateClock();
+function startGas(){isGasHeld=true;}
+function stopGas(){isGasHeld=false;}
+function toggleMode(){isReverse=!isReverse;modeEl.textContent=isReverse?'Lùi':'Tiến';}
 
-    const interval = setInterval(() => {
-      if (speed < 120) speed += 2;
-      if (battery > 0) battery -= 0.9;
-
-      speedElem.textContent = speed;
-      batteryElem.textContent = Math.max(Math.floor(battery), 0);
-
-      if (battery <= 0) clearInterval(interval);
-    }, 150);
-  </script>
+setInterval(()=>{
+  if(isGasHeld){
+    if(isReverse){if(speed>-20) speed--;}
+    else{if(speed<120) speed++;}
+    odo+=0.01;
+  } else {
+    if(speed>0) speed--; if(speed<0) speed++;
+  }
+  speedEl.textContent=Math.abs(speed);
+  odoEl.textContent=odo.toFixed(2);
+  batteryTimer++;
+  if(batteryTimer>=1200){
+    batteryTimer=0;
+    if(battery>0) battery--;
+    batteryEl.textContent=battery+'%';
+  }
+},100);
+</script>
 
 </body>
 </html>
