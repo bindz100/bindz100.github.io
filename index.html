@@ -166,16 +166,19 @@
       height: 100%;
       width: 0%;
       background: linear-gradient(to right, #00f2fe, #4facfe);
+      position: relative;
       transition: width 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .loading-text {
-      margin-top: 10px;
-      text-align: center;
-      font-weight: bold;
+    #loadingText {
+      font-size: 14px;
       color: white;
-      font-size: 16px;
+      font-weight: bold;
       text-shadow: 0 0 3px #000;
+      z-index: 2;
     }
   </style>
 </head>
@@ -197,9 +200,10 @@
 
   <!-- LOADING BAR -->
   <div class="loading-container" id="loadingContainer">
-    <div class="loading-bar" id="loadingBar"></div>
+    <div class="loading-bar" id="loadingBar">
+      <span id="loadingText">0%</span>
+    </div>
   </div>
-  <div class="loading-text" id="loadingText">0%</div>
 
   <!-- SCRIPT -->
   <script>
@@ -220,7 +224,7 @@
         text.textContent = percent + '%';
         if (percent >= 100) {
           clearInterval(interval);
-          window.location.href = "result.html"; // ← đổi nếu cần
+          window.location.href = "result.html"; // ← Chuyển trang
         }
       }, 100); // 100ms x 100 = 10 giây
     }
