@@ -1,115 +1,210 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Vượt Link Shader Style</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vượt Link - Bindz VIP</title>
   <style>
-    @keyframes shaderBackground {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+    @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1e3c72);
-      background-size: 400% 400%;
-      animation: shaderBackground 15s ease infinite;
-      color: white;
+      padding: 0;
+      font-family: 'Rubik Mono One', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Lớp ánh sáng sci-fi quét ngang */
+    .scan-light {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent 40%, rgba(0,255,255,0.08) 50%, transparent 60%);
+      animation: scan 5s linear infinite;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+
+    .glow-circle {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,255,255,0.2), transparent 70%);
+      animation: pulse 6s infinite ease-in-out;
+      z-index: 0;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.95); opacity: 0.3; }
+      50% { transform: scale(1.1); opacity: 0.7; }
+    }
+
+    .box {
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 60px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0,255,255,0.25);
       text-align: center;
+      backdrop-filter: blur(8px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .box::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(0,255,255,0.05), transparent 70%);
+      animation: rotateGlow 20s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes rotateGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     h1 {
       font-size: 28px;
       margin-bottom: 30px;
-      text-shadow: 0 0 10px #00fff7, 0 0 20px #00c3ff;
+      color: #00ffe0;
+      text-shadow: 0 0 10px #00ffe0;
+      animation: glowText 3s infinite ease-in-out;
     }
 
-    button {
-      padding: 15px 30px;
-      font-size: 18px;
-      border: none;
-      border-radius: 10px;
-      background: #00b894;
-      color: white;
-      cursor: pointer;
-      margin-top: 20px;
-      transition: 0.3s;
-      box-shadow: 0 0 10px #00ffc3;
+    @keyframes glowText {
+      0%, 100% { text-shadow: 0 0 10px #00ffe0; }
+      50% { text-shadow: 0 0 20px #00ffff; }
     }
 
-    button:hover {
-      background: #019875;
-      box-shadow: 0 0 15px #00ffc3, 0 0 25px #00fff7;
-    }
-
-    #countdown {
+    #countdown1, #countdown2 {
       font-size: 24px;
-      margin-top: 15px;
+      margin-top: 20px;
+      color: #ffffffdd;
+      text-shadow: 0 0 6px #00ffff;
+      animation: popCount 1s infinite ease-in-out;
     }
 
-    span {
-      font-weight: bold;
+    @keyframes popCount {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .btn {
+      padding: 14px 30px;
+      margin-top: 20px;
+      font-size: 18px;
+      border: 2px solid #00ffe0;
+      border-radius: 10px;
+      background: rgba(0,255,255,0.1);
+      color: #00ffe0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Rubik Mono One', sans-serif;
+      box-shadow: 0 0 15px rgba(0,255,255,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: all 0.4s ease;
+    }
+
+    .btn:hover::after {
+      left: 100%;
+    }
+
+    .btn:hover {
+      background: rgba(0,255,255,0.2);
+      color: #fff;
+      box-shadow: 0 0 20px #00ffe0;
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h1>⚡ Vui lòng thực hiện các bước để lấy mã ⚡</h1>
-  
-  <button id="btn1">Bấm để bắt đầu</button>
-  <div id="countdown1" style="display:none;">Đợi <span id="timer1">64</span> giây...</div>
+  <div class="glow-circle"></div>
+  <div class="scan-light"></div>
 
-  <button id="btn2" style="display:none;">Bấm tiếp để hoàn tất</button>
-  <div id="countdown2" style="display:none;">Đợi <span id="timer2">53</span> giây...</div>
+  <div class="box">
+    <h1>Vui lòng xác minh để tiếp tục</h1>
+
+    <button id="btn1" class="btn">🚀 Bấm để bắt đầu</button>
+    <div id="countdown1" class="hidden">Đang đếm ngược: 64 giây</div>
+
+    <button id="btn2" class="btn hidden">✅ Bấm tiếp để hoàn tất</button>
+    <div id="countdown2" class="hidden">Đang đếm ngược: 53 giây</div>
+  </div>
 
   <script>
-    const btn1 = document.getElementById('btn1');
-    const btn2 = document.getElementById('btn2');
-    const countdown1 = document.getElementById('countdown1');
-    const countdown2 = document.getElementById('countdown2');
-    const timer1 = document.getElementById('timer1');
-    const timer2 = document.getElementById('timer2');
+    const btn1 = document.getElementById("btn1");
+    const btn2 = document.getElementById("btn2");
+    const countdown1 = document.getElementById("countdown1");
+    const countdown2 = document.getElementById("countdown2");
 
-    btn1.onclick = () => {
-      btn1.style.display = 'none';
-      countdown1.style.display = 'block';
+    btn1.addEventListener("click", () => {
+      btn1.classList.add("hidden");
+      countdown1.classList.remove("hidden");
+
       let time1 = 64;
-      const interval1 = setInterval(() => {
+      const timer1 = setInterval(() => {
         time1--;
-        timer1.textContent = time1;
+        countdown1.textContent = `Đang đếm ngược: ${time1} giây`;
         if (time1 <= 0) {
-          clearInterval(interval1);
-          countdown1.style.display = 'none';
-          btn2.style.display = 'inline-block';
+          clearInterval(timer1);
+          countdown1.classList.add("hidden");
+          btn2.classList.remove("hidden");
         }
       }, 1000);
-    };
+    });
 
-    btn2.onclick = () => {
-      btn2.style.display = 'none';
-      countdown2.style.display = 'block';
+    btn2.addEventListener("click", () => {
+      btn2.classList.add("hidden");
+      countdown2.classList.remove("hidden");
+
       let time2 = 53;
-      const interval2 = setInterval(() => {
+      const timer2 = setInterval(() => {
         time2--;
-        timer2.textContent = time2;
+        countdown2.textContent = `Đang đếm ngược: ${time2} giây`;
         if (time2 <= 0) {
-          clearInterval(interval2);
-          window.location.href = 'result.html'; // 👉 thay bằng link nếu muốn
+          clearInterval(timer2);
+          window.location.href = "result.html";
         }
       }, 1000);
-    };
+    });
   </script>
 </body>
 </html>
