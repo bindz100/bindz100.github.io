@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Nhạc nền</title>
+</head>
+<body style="margin:0; background:transparent;">
+  <audio id="bgMusic" autoplay loop>
+    <source src="audio/Screen Recording 2025-06-07 122835 (online-audio-converter.com).mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // Nếu autoplay bị chặn, thử phát sau 1 chút
+    const music = document.getElementById("bgMusic");
+    const playMusic = () => {
+      music.play().catch(() => {
+        setTimeout(() => music.play().catch(() => {}), 2000);
+      });
+    };
+
+    window.onload = playMusic;
+    document.addEventListener("click", playMusic); // fallback khi user click
+  </script>
+</body>
+</html>
