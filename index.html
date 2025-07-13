@@ -5,28 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Welcome to Bindz</title>
   <style>
+    /* Gradient nền động */
     body {
       margin: 0;
       padding: 0;
       height: 100vh;
-      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1e3c72);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       overflow: hidden;
     }
 
-    .welcome {
-      position: absolute;
-      top: 50px;
-      left: 50%;
-      transform: translateX(-50%) translateY(-30px);
-      font-size: 4em;
-      color: #ffffff;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.3), 0 4px 10px rgba(255,255,255,0.2);
-      opacity: 0;
-      animation: fadeSlideDown 2s ease-out forwards;
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
     }
 
-    @keyframes fadeSlideDown {
+    /* Chữ chính Welcome */
+    .welcome {
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 4.5em;
+      color: #ffffff;
+      text-shadow: 
+        0 0 5px #fff,
+        0 0 10px #0ff,
+        0 0 20px #0ff,
+        0 0 40px #0ff,
+        0 0 80px #0ff;
+      opacity: 0;
+      animation: fadeGlow 2s ease-out forwards, pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes fadeGlow {
       0% {
         opacity: 0;
         transform: translateX(-50%) translateY(-30px);
@@ -34,6 +49,25 @@
       100% {
         opacity: 1;
         transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        text-shadow:
+          0 0 5px #fff,
+          0 0 10px #0ff,
+          0 0 20px #0ff,
+          0 0 40px #0ff,
+          0 0 80px #0ff;
+      }
+      50% {
+        text-shadow:
+          0 0 10px #fff,
+          0 0 20px #0ff,
+          0 0 30px #00f,
+          0 0 60px #00f,
+          0 0 100px #00f;
       }
     }
   </style>
