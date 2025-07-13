@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kết Quả - Bindz</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KEY 24H VIP</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
 
@@ -16,7 +16,7 @@
       padding: 0;
       font-family: 'Rubik Mono One', sans-serif;
       background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: #fff;
+      color: #00ffe0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -26,110 +26,126 @@
       position: relative;
     }
 
-    h1 {
-      font-size: 26px;
-      color: #00ffe0;
-      margin-bottom: 30px;
-      animation: glowText 3s ease-in-out infinite;
+    /* Hiệu ứng nền ánh sáng */
+    .glow-circle {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,255,255,0.15), transparent 70%);
+      animation: pulse 6s infinite ease-in-out;
+      z-index: 0;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.95); opacity: 0.3; }
+      50% { transform: scale(1.1); opacity: 0.6; }
+    }
+
+    /* Ánh sáng quét ngang */
+    .scan-light {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent 40%, rgba(0,255,255,0.06) 50%, transparent 60%);
+      animation: scan 6s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+
+    .container {
+      z-index: 2;
       text-align: center;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 30px rgba(0,255,255,0.2);
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #00ffe0;
+      text-shadow: 0 0 8px #00ffe0;
+      animation: glowText 3s infinite ease-in-out;
+      margin-bottom: 25px;
     }
 
     @keyframes glowText {
-      0%, 100% { text-shadow: 0 0 8px #00ffe0; }
-      50% { text-shadow: 0 0 16px #00ffff; }
+      0%, 100% { text-shadow: 0 0 10px #00ffe0; }
+      50% { text-shadow: 0 0 20px #00ffff; }
     }
 
-    .key-box {
-      background: rgba(255,255,255,0.05);
-      padding: 30px 40px;
-      border-radius: 20px;
-      box-shadow: 0 0 25px rgba(0,255,255,0.3);
-      border: 1px solid rgba(255,255,255,0.1);
-      text-align: center;
-      backdrop-filter: blur(6px);
-    }
-
-    .key-code {
-      font-size: 20px;
-      color: #ffffffee;
+    #key {
+      font-size: 22px;
+      padding: 20px 35px;
+      border: 2px dashed #00ffe0;
+      border-radius: 12px;
+      background: rgba(0,255,255,0.08);
+      color: #ffffff;
+      user-select: all;
       margin-bottom: 20px;
-      word-break: break-all;
-      text-shadow: 0 0 4px #00ffff;
+      animation: popKey 1.5s infinite ease-in-out;
     }
 
-    .copy-btn {
+    @keyframes popKey {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    .btn-copy {
       font-size: 16px;
-      padding: 12px 24px;
+      padding: 10px 25px;
+      background: rgba(0,255,255,0.15);
+      color: #00ffe0;
       border: 2px solid #00ffe0;
       border-radius: 10px;
-      background: rgba(0,255,255,0.1);
-      color: #00ffe0;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 10px rgba(0,255,255,0.4);
+      font-family: 'Rubik Mono One', sans-serif;
+      transition: 0.3s;
     }
 
-    .copy-btn:hover {
-      background: rgba(0,255,255,0.25);
-      color: #fff;
-      box-shadow: 0 0 20px #00ffe0;
-    }
-
-    #lockBtn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      font-size: 20px;
-      padding: 10px 14px;
-      background: rgba(0,255,255,0.15);
-      border: 2px solid #00ffe0;
-      border-radius: 50%;
-      color: #00ffe0;
-      cursor: pointer;
-      z-index: 9999;
-      box-shadow: 0 0 10px rgba(0,255,255,0.5);
-      transition: all 0.3s ease;
-    }
-
-    #lockBtn:hover {
+    .btn-copy:hover {
       background: rgba(0,255,255,0.3);
       color: #fff;
       box-shadow: 0 0 15px #00ffe0;
     }
+
+    .note {
+      font-size: 14px;
+      color: #cccccc;
+      margin-top: 18px;
+      opacity: 0.7;
+    }
+
   </style>
 </head>
 <body>
+  <div class="glow-circle"></div>
+  <div class="scan-light"></div>
 
-  <h1>🔑 Key 24h của bạn</h1>
-
-  <div class="key-box">
-    <div class="key-code" id="keyText">BINDZ-24H--shjwi188cbakajdb</div>
-    <button class="copy-btn" onclick="copyKey()">📋 Copy</button>
+  <div class="container">
+    <h1>🔑 KEY 24H CỦA BẠN</h1>
+    <div id="key">BINDZ-24H-qwersa</div>
+    <button class="btn-copy" onclick="copyKey()">📋 Sao chép Key</button>
+    <div class="note">(Key này có hiệu lực trong 24 giờ)</div>
   </div>
 
-  <button id="lockBtn" title="Nhập lại key 🔒">🔒</button>
-
   <script>
-    // Bảo vệ nếu chưa xác minh key
-    if (localStorage.getItem("bindz_key_verified") !== "yes") {
-      window.location.href = "verify.html";
-    }
-
     function copyKey() {
-      const key = document.getElementById("keyText").innerText;
-      navigator.clipboard.writeText(key).then(() => {
+      const keyText = document.getElementById("key").innerText;
+      navigator.clipboard.writeText(keyText).then(() => {
         alert("✅ Đã sao chép key!");
       }).catch(() => {
-        alert("⚠️ Không thể sao chép. Hãy thử lại.");
+        alert("❌ Không thể sao chép. Vui lòng thử lại.");
       });
     }
-
-    // Nút quay lại nhập key
-    document.getElementById("lockBtn").addEventListener("click", () => {
-      localStorage.removeItem("bindz_key_verified");
-      window.location.href = "verify.html";
-    });
   </script>
-
 </body>
 </html>
