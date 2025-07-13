@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu Nổi Di Chuyển</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
+      font-family: Arial, sans-serif;
+    }
+
+    /* Nút hình tròn nổi */
+    #floatingBtn {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      width: 50px;
+      height: 50px;
+      background-color: #00bcd4;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 24px;
+      cursor: grab;
+      z-index: 999;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    #floatingBtn:hover {
+      background-color: #0097a7;
+    }
+
+    /* Menu hiện ra khi bấm */
+    #menuContent {
+      position: absolute;
+      top: 90px;
+      left: 30px;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 15px;
+      border-radius: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 998;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    #menuContent button {
+      padding: 10px 15px;
+      background-color: #ff5252;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 150px;
+    }
+
+    #menuContent button:hover {
+      background-color: #e53935;
+    }
+
+    #menuContent .secondary {
+      background-color: #4caf50;
+    }
+
+    #menuContent .secondary:hover {
+      background-color: #388e3c;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nút hình tròn nổi -->
+<div id="floatingBtn" title="Mở menu">☰</div>
+
+<!-- Nội dung menu -->
+<div id="menuContent">
+  <button onclick="resetPage()">🔄 Reset trang</button>
+  <button class="secondary" onclick="openNewTab()">🆕 Mở tab mới</button>
+</div>
+
+<script>
+  const btn = document.getElementById("floatingBtn");
+  const menu = document.getElementById("menuContent");
+
+  let isDragging = false;
+  let offsetX = 0, offsetY = 0;
+
+  // Bắt đầu kéo
+  btn.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    offsetX = e.clientX - btn.offsetLeft;
+    offsetY = e.clientY - btn.offsetTop;
+    btn.style.cursor = "grabbing";
+  });
+
+  // Di chuyển khi kéo
+  document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+      const x = e.clientX - offsetX;
+      const y = e.clientY - offsetY;
+      btn.style.left = `${x}px`;
+      btn.style.top = `${y}px`;
+
+      menu.style.left = `${x}px`;
+      menu.style.top = `${y + 60}px`;
+    }
+  });
+
+  // Thả nút
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+    btn.style.cursor = "grab";
+  });
+
+  // Toggle menu khi bấm
+  btn.addEventListener("click", () => {
+    if (!isDragging) {
+      menu.style.display = (menu.style.display === "none") ? "flex" : "none";
+    }
+  });
+
+  // Reset trang
+  function resetPage() {
+    location.reload();
+  }
+
+  // Mở tab mới giống trang hiện tại
+  function openNewTab() {
+    window.open(window.location.href, '_blank');
+  }
+</script>
+
+</body>
+</html>
