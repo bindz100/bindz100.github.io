@@ -3,11 +3,16 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Giả lập LED Vuông PEGA</title>
+  <title>Giả lập xe điện LED Vuông</title>
   <style>
     @font-face {
-      font-family: 'DSDigital';
-      src: url('https://cdn.jsdelivr.net/gh/fontsource/ds-digital/index.css');
+      font-family: 'DS-Digital';
+      src: url('https://fonts.cdnfonts.com/s/14692/DS-DIGI.TTF') format('truetype');
+    }
+    * {
+      user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
     }
     body {
       margin:0;
@@ -28,22 +33,19 @@
       box-shadow:0 0 15px rgba(0,255,255,0.2);
       text-align:center;
       width:300px;
-      font-family:sans-serif;
     }
     .dashboard h1 {
       margin:0;
       font-size:24px;
       color:#00ffe0;
-      font-family:sans-serif;
     }
     .speed {
       font-size:64px;
-      font-family:'DSDigital', monospace;
+      font-family:'DS-Digital', monospace;
       margin:10px 0;
     }
     .unit {
       font-size:20px;
-      font-family:sans-serif;
     }
     .info-row {
       display:flex;
@@ -52,7 +54,7 @@
       font-size:18px;
     }
     .info-row .number {
-      font-family:'DSDigital', monospace;
+      font-family:'DS-Digital', monospace;
     }
     .controls {
       margin-top:30px;
@@ -66,6 +68,7 @@
       border:none;
       border-radius:8px;
       cursor:pointer;
+      touch-action: none;
     }
     .gas {
       background:#009688;
@@ -88,54 +91,4 @@
     <div class="info-row">
       <div>🔋 <span id="battery" class="number">100%</span></div>
       <div id="mode">Tiến</div>
-    </div>
-    <div class="info-row">
-      <div id="clock">--:--</div>
-      <div>ODO: <span id="odo" class="number">0</span> km</div>
-    </div>
-  </div>
-
-  <div class="controls">
-    <button class="gas"
-      onmousedown="startGas()" onmouseup="stopGas()"
-      ontouchstart="startGas()" ontouchend="stopGas()">Giữ để chạy 🚀</button>
-    <button class="toggle" onclick="toggleMode()">Chuyển Tiến/Lùi</button>
-  </div>
-
-  <script>
-    let speed=0,battery=100,odo=0,isGasHeld=false,isReverse=false,batteryTimer=0;
-    const speedEl=document.getElementById('speed'),
-          batteryEl=document.getElementById('battery'),
-          modeEl=document.getElementById('mode'),
-          odoEl=document.getElementById('odo'),
-          clockEl=document.getElementById('clock');
-
-    function updateClock(){
-      const n=new Date(),h=String(n.getHours()).padStart(2,'0'),m=String(n.getMinutes()).padStart(2,'0');
-      clockEl.textContent=`${h}:${m}`;
-    }
-    setInterval(updateClock,1000);updateClock();
-
-    function startGas(){isGasHeld=true;}
-    function stopGas(){isGasHeld=false;}
-    function toggleMode(){isReverse=!isReverse;modeEl.textContent=isReverse?'Lùi':'Tiến';}
-
-    setInterval(()=>{
-      if(isGasHeld){
-        isReverse ? (speed> -20 && speed--) : (speed<120 && speed++);
-        odo+=0.01;
-      } else {
-        speed>0?speed--:speed<0 && speed++;
-      }
-      speedEl.textContent=Math.abs(speed);
-      odoEl.textContent=odo.toFixed(2);
-      batteryTimer++;
-      if(batteryTimer>=1200){
-        batteryTimer=0;
-        battery>0 && battery--;
-        batteryEl.textContent=battery+'%';
-      }
-    },100);
-  </script>
-</body>
-</html>
+   
