@@ -6,7 +6,6 @@
   <title>Welcome to Bindz</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
   <style>
-    /* NỀN MÂY XANH ĐỘNG */
     body {
       margin: 0;
       padding: 0;
@@ -51,7 +50,6 @@
       100% { transform: translateX(120vw); }
     }
 
-    /* CHỮ WELCOME TO BINDZ */
     .header {
       position: absolute;
       top: 60px;
@@ -89,7 +87,6 @@
       }
     }
 
-    /* NÚT BẮT ĐẦU 😈 */
     .start-btn {
       position: absolute;
       top: 300px;
@@ -149,11 +146,42 @@
         transform: translateX(-50%) translateY(0);
       }
     }
+
+    /* LOADING BAR */
+    .loading-container {
+      position: absolute;
+      top: 370px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      display: none;
+    }
+
+    .loading-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, #00f2fe, #4facfe);
+      transition: width 0.2s ease;
+    }
+
+    .loading-text {
+      margin-top: 10px;
+      text-align: center;
+      font-weight: bold;
+      color: white;
+      font-size: 16px;
+      text-shadow: 0 0 3px #000;
+    }
   </style>
 </head>
 <body>
 
-  <!-- MÂY TRÔI -->
+  <!-- MÂY -->
   <div class="cloud cloud1"></div>
   <div class="cloud cloud2"></div>
   <div class="cloud cloud3"></div>
@@ -164,13 +192,37 @@
     <div class="text to">To Bindz</div>
   </div>
 
-  <!-- NÚT -->
+  <!-- NÚT BẮT ĐẦU -->
   <button class="start-btn" onclick="startApp()">Bắt Đầu 😈</button>
 
+  <!-- LOADING BAR -->
+  <div class="loading-container" id="loadingContainer">
+    <div class="loading-bar" id="loadingBar"></div>
+  </div>
+  <div class="loading-text" id="loadingText">0%</div>
+
+  <!-- SCRIPT -->
   <script>
     function startApp() {
-      // Chuyển trang sau khi nhấn nút (tùy bạn sửa lại link)
-      window.location.href = "result.html"; 
+      // Ẩn nút
+      document.querySelector('.start-btn').style.display = 'none';
+
+      // Hiện loading
+      const bar = document.getElementById('loadingBar');
+      const text = document.getElementById('loadingText');
+      const container = document.getElementById('loadingContainer');
+      container.style.display = 'block';
+
+      let percent = 0;
+      const interval = setInterval(() => {
+        percent++;
+        bar.style.width = percent + '%';
+        text.textContent = percent + '%';
+        if (percent >= 100) {
+          clearInterval(interval);
+          window.location.href = "result.html"; // ← đổi nếu cần
+        }
+      }, 100); // 100ms x 100 = 10 giây
     }
   </script>
 
