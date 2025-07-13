@@ -1,242 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Welcome to Bindz</title>
-
-  <!-- Font chữ đẹp -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Orbitron:wght@500&display=swap" rel="stylesheet">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* Nền chuyển động */
-    body {
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
+
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+    }
+
+    body {
       height: 100vh;
-      background: linear-gradient(to top, #a8edea, #fed6e3);
+      background: linear-gradient(-45deg, #91e5ff, #b3dfff, #e0f7ff, #a8dfff);
       background-size: 400% 400%;
-      animation: cloudBG 20s ease infinite;
-      font-family: 'Playfair Display', serif;
+      animation: gradientBG 10s ease infinite;
+      font-family: 'Quicksand', sans-serif;
       overflow: hidden;
     }
 
-    @keyframes cloudBG {
+    @keyframes gradientBG {
       0% {background-position: 0% 50%;}
       50% {background-position: 100% 50%;}
       100% {background-position: 0% 50%;}
     }
 
-    /* Mây */
-    .cloud {
+    .container {
       position: absolute;
-      background: #fff;
-      border-radius: 50%;
-      opacity: 0.4;
-      animation: floatClouds 60s linear infinite;
-    }
-
-    .cloud::before, .cloud::after {
-      content: '';
-      position: absolute;
-      background: #fff;
-      border-radius: 50%;
-    }
-
-    .cloud1 { width: 200px; height: 60px; top: 100px; left: -250px; animation-delay: 0s; }
-    .cloud2 { width: 150px; height: 50px; top: 200px; left: -200px; animation-delay: 20s; }
-    .cloud3 { width: 250px; height: 70px; top: 300px; left: -300px; animation-delay: 40s; }
-
-    .cloud::before { width: 100px; height: 100px; top: -25px; left: 25px; }
-    .cloud::after { width: 120px; height: 120px; top: -40px; left: 90px; }
-
-    @keyframes floatClouds {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(120vw); }
-    }
-
-    /* Chữ Welcome / To Bindz */
-    .header {
-      position: absolute;
-      top: 60px;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 10%;
+      width: 100%;
       text-align: center;
+      color: white;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
     }
 
-    .text {
-      font-size: 2.5em;
-      color: #ffffff;
-      letter-spacing: 1.5px;
-      text-shadow:
-        0 0 5px #ffffffaa,
-        0 0 10px #a3d5ff,
-        0 0 20px #89cfff,
-        0 2px 8px rgba(0, 0, 0, 0.2);
+    .welcome, .to-bindz {
       opacity: 0;
-      animation: fadeUp 1.5s ease forwards;
+      font-size: 40px;
+      transition: opacity 1s ease;
     }
 
-    .text.to {
-      font-size: 2.2em;
-      animation-delay: 1.8s;
+    .to-bindz {
+      font-size: 32px;
+      margin-top: 10px;
     }
 
-    @keyframes fadeUp {
-      0% {
-        opacity: 0;
-        transform: translateY(30px) scale(0.95);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+    .show {
+      opacity: 1;
     }
 
-    /* Nút Bắt Đầu */
     .start-btn {
-      position: absolute;
-      top: 300px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 14px 36px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #fff;
-      background: linear-gradient(120deg, #6a11cb, #2575fc);
-      border: none;
-      border-radius: 12px;
+      display: none;
+      margin: 50px auto;
+      padding: 15px 40px;
+      font-size: 20px;
+      background: transparent;
+      color: white;
+      border: 3px solid white;
+      border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      opacity: 0;
-      animation: fadeInBtn 1s ease forwards;
-      animation-delay: 3.5s;
-      transition: all 0.3s ease;
+      animation: glow 2s linear infinite;
       position: relative;
-      z-index: 1;
-      overflow: hidden;
+      touch-action: none;
     }
 
-    .start-btn::before {
-      content: "";
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(270deg, #00f2fe, #4facfe, #00f2fe);
-      background-size: 600% 600%;
-      z-index: -1;
-      border-radius: 14px;
-      animation: borderFlow 5s linear infinite;
-      filter: blur(8px);
+    @keyframes glow {
+      0% { box-shadow: 0 0 5px #00fff7, 0 0 10px #00e5ff; }
+      50% { box-shadow: 0 0 20px #00eaff, 0 0 30px #00ffff; }
+      100% { box-shadow: 0 0 5px #00fff7, 0 0 10px #00e5ff; }
     }
 
-    .start-btn:hover {
-      transform: translateX(-50%) scale(1.05);
-      box-shadow: 0 0 18px rgba(79, 172, 254, 0.6);
-    }
-
-    @keyframes borderFlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    @keyframes fadeInBtn {
-      from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
-    }
-
-    /* Loading bar */
-    .loading-container {
-      position: absolute;
-      top: 370px;
-      left: 50%;
-      transform: translateX(-50%);
+    .progress-container {
+      display: none;
+      margin-top: 30px;
       width: 60%;
-      height: 20px;
-      background: rgba(255, 255, 255, 0.3);
+      background: #ddd;
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      display: none;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .loading-bar {
-      height: 100%;
+    .progress-bar {
+      height: 30px;
       width: 0%;
-      background: linear-gradient(to right, #00f2fe, #4facfe);
-      position: relative;
-      transition: width 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #loadingText {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 16px;
-      color: white;
+      background: linear-gradient(to right, #00faff, #00ffe7);
+      text-align: center;
+      line-height: 30px;
+      color: #000;
       font-weight: bold;
-      text-shadow: 0 0 3px #000;
-      z-index: 2;
+      font-family: 'Quicksand', sans-serif;
     }
   </style>
 </head>
 <body>
 
-  <!-- Mây -->
-  <div class="cloud cloud1"></div>
-  <div class="cloud cloud2"></div>
-  <div class="cloud cloud3"></div>
+  <div class="container">
+    <div class="welcome" id="welcome">Welcome</div>
+    <div class="to-bindz" id="toBindz">to Bindz</div>
+    <button class="start-btn" id="startBtn">Bắt Đầu 😈</button>
 
-  <!-- Chữ tiêu đề -->
-  <div class="header">
-    <div class="text welcome">Welcome</div>
-    <div class="text to">To Bindz</div>
-  </div>
-
-  <!-- Nút bắt đầu -->
-  <button class="start-btn" onclick="startApp()">Bắt Đầu 😈</button>
-
-  <!-- Thanh loading -->
-  <div class="loading-container" id="loadingContainer">
-    <div class="loading-bar" id="loadingBar">
-      <span id="loadingText">0%</span>
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-bar" id="progressBar">0%</div>
     </div>
   </div>
 
-  <!-- Script xử lý -->
   <script>
-    function startApp() {
-      // Ẩn nút
-      document.querySelector('.start-btn').style.display = 'none';
+    // Hiện chữ Welcome -> to Bindz
+    setTimeout(() => {
+      document.getElementById('welcome').classList.add('show');
+    }, 500);
+    setTimeout(() => {
+      document.getElementById('toBindz').classList.add('show');
+    }, 1500);
+    setTimeout(() => {
+      document.getElementById('startBtn').style.display = 'inline-block';
+    }, 2500);
 
-      // Hiện loading
-      const bar = document.getElementById('loadingBar');
-      const text = document.getElementById('loadingText');
-      const container = document.getElementById('loadingContainer');
-      container.style.display = 'block';
+    // Bắt đầu loading
+    document.getElementById('startBtn').addEventListener('click', () => {
+      document.getElementById('startBtn').style.display = 'none';
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
+      progressContainer.style.display = 'block';
 
       let percent = 0;
       const interval = setInterval(() => {
         percent++;
-        bar.style.width = percent + '%';
-        text.textContent = percent + '%';
+        progressBar.style.width = percent + '%';
+        progressBar.textContent = percent + '%';
         if (percent >= 100) {
           clearInterval(interval);
-          window.location.href = "result.html";
+          window.location.href = 'result.html';
         }
-      }, 100); // 100ms x 100 = 10 giây
-    }
+      }, 100);
+    });
   </script>
-
 </body>
 </html>
