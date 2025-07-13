@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bindz Key 24H</title>
+  <title>Kết Quả - Bindz</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
+
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       padding: 0;
       font-family: 'Rubik Mono One', sans-serif;
-      background: linear-gradient(135deg, #000000, #003344);
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -22,58 +24,92 @@
       position: relative;
     }
 
-    .glow {
-      animation: glowText 2s infinite alternate;
+    h1 {
+      font-size: 26px;
+      color: #00ffe0;
+      margin-bottom: 30px;
+      animation: glowText 3s ease-in-out infinite;
+      text-align: center;
     }
 
     @keyframes glowText {
-      0% { text-shadow: 0 0 10px #0ff; }
-      100% { text-shadow: 0 0 20px #0ff, 0 0 30px #0ff; }
+      0%, 100% { text-shadow: 0 0 8px #00ffe0; }
+      50% { text-shadow: 0 0 16px #00ffff; }
     }
 
-    .box {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 50px;
+    .key-box {
+      background: rgba(255,255,255,0.05);
+      padding: 30px 40px;
       border-radius: 20px;
-      box-shadow: 0 0 30px rgba(0,255,255,0.3);
+      box-shadow: 0 0 25px rgba(0,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
       text-align: center;
       backdrop-filter: blur(6px);
       display: none;
     }
 
-    .btn {
-      padding: 12px 24px;
+    .key-code {
+      font-size: 20px;
+      color: #ffffffee;
+      margin-bottom: 20px;
+      word-break: break-all;
+      text-shadow: 0 0 4px #00ffff;
+    }
+
+    .copy-btn {
       font-size: 16px;
-      margin-top: 20px;
-      border: none;
+      padding: 12px 24px;
+      border: 2px solid #00ffe0;
       border-radius: 10px;
-      background: #00ffee33;
-      color: #0ff;
+      background: rgba(0,255,255,0.1);
+      color: #00ffe0;
       cursor: pointer;
-      font-family: 'Rubik Mono One', sans-serif;
-      transition: 0.3s;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0,255,255,0.4);
     }
 
-    .btn:hover {
-      background: #00ffee55;
+    .copy-btn:hover {
+      background: rgba(0,255,255,0.25);
       color: #fff;
-      box-shadow: 0 0 12px #0ff;
+      box-shadow: 0 0 20px #00ffe0;
     }
 
-    #keyInputOverlay {
+    #lockBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 20px;
+      padding: 10px 14px;
+      background: rgba(0,255,255,0.15);
+      border: 2px solid #00ffe0;
+      border-radius: 50%;
+      color: #00ffe0;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 0 10px rgba(0,255,255,0.5);
+      transition: all 0.3s ease;
+    }
+
+    #lockBtn:hover {
+      background: rgba(0,255,255,0.3);
+      color: #fff;
+      box-shadow: 0 0 15px #00ffe0;
+    }
+
+    /* Overlay nhập key */
+    #keyOverlay {
       position: absolute;
       top: 0; left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.85);
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 10;
+      z-index: 999;
     }
 
-    #keyInputOverlay input {
+    #keyOverlay input {
       padding: 12px;
       font-size: 16px;
       width: 300px;
@@ -84,43 +120,99 @@
       margin-bottom: 20px;
       font-family: 'Rubik Mono One', sans-serif;
     }
+
+    #keyOverlay button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background: #00ffee33;
+      color: #0ff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: 'Rubik Mono One', sans-serif;
+      transition: 0.3s;
+    }
+
+    #keyOverlay button:hover {
+      background: #00ffee55;
+      color: #fff;
+      box-shadow: 0 0 12px #0ff;
+    }
+
+    #successMessage {
+      color: #0f0;
+      margin-top: 20px;
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <!-- Overlay để nhập key -->
-  <div id="keyInputOverlay">
-    <input id="keyInput" placeholder="Nhập key 24H vào đây..." />
-    <button class="btn" onclick="checkKey()">🔓 Xác minh</button>
+
+  <div id="keyOverlay">
+    <input id="keyInput" placeholder="🔑 Nhập key để mở khóa..."/>
+    <button onclick="checkKey()">✅ Xác minh</button>
+    <div id="successMessage">🔓 Key hợp lệ! Đang mở...</div>
   </div>
 
-  <!-- Nội dung chính -->
-  <div class="box" id="mainContent">
-    <h1 class="glow">🎉 Key của bạn:</h1>
-    <div id="keyDisplay" style="font-size: 20px; margin-top: 10px;">BINDZ-24H--shjwi188cbakajdb</div>
-    <button class="btn" onclick="copyKey()">📋 Sao chép key</button>
+  <h1 id="title" style="display:none;">🔑 Key 24h của bạn</h1>
+  <div class="key-box" id="keyBox">
+    <div class="key-code" id="keyText">BINDZ-24H--shjwi188cbakajdb</div>
+    <button class="copy-btn" onclick="copyKey()">📋 Copy</button>
   </div>
+
+  <button id="lockBtn" title="Nhập key">🔒</button>
 
   <script>
     const CORRECT_KEY = "BINDZ-24H--shjwi188cbakajdb";
 
+    const overlay = document.getElementById("keyOverlay");
+    const lockBtn = document.getElementById("lockBtn");
+    const title = document.getElementById("title");
+    const keyBox = document.getElementById("keyBox");
+
+    // Kiểm tra nếu đã xác minh key thì hiển thị kết quả
+    if (localStorage.getItem("bindz_key_verified") === "yes") {
+      title.style.display = "block";
+      keyBox.style.display = "block";
+    }
+
     function checkKey() {
       const input = document.getElementById("keyInput").value.trim();
+      const success = document.getElementById("successMessage");
       if (input === CORRECT_KEY) {
-        document.getElementById("keyInputOverlay").style.display = "none";
-        document.getElementById("mainContent").style.display = "block";
+        success.style.display = "block";
+        localStorage.setItem("bindz_key_verified", "yes");
+        setTimeout(() => {
+          overlay.style.display = "none";
+          title.style.display = "block";
+          keyBox.style.display = "block";
+        }, 800);
       } else {
-        alert("❌ Sai key rồi! Vui lòng thử lại.");
+        alert("❌ Key sai. Thử lại!");
       }
     }
 
     function copyKey() {
-      const key = document.getElementById("keyDisplay").innerText;
+      const key = document.getElementById("keyText").innerText;
       navigator.clipboard.writeText(key).then(() => {
-        alert("📋 Đã sao chép key vào clipboard!");
+        alert("📋 Đã sao chép key!");
       }).catch(() => {
-        alert("⚠️ Không sao chép được. Dùng trình duyệt khác!");
+        alert("⚠️ Không sao chép được!");
       });
     }
+
+    lockBtn.addEventListener("click", () => {
+      // Nếu đã xác minh rồi thì reset
+      if (localStorage.getItem("bindz_key_verified") === "yes") {
+        if (confirm("Bạn có muốn nhập lại key?")) {
+          localStorage.removeItem("bindz_key_verified");
+          location.reload();
+        }
+      } else {
+        // Hiện overlay nhập key
+        overlay.style.display = "flex";
+      }
+    });
   </script>
 </body>
 </html>
