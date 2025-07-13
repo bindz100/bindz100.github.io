@@ -2,153 +2,109 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Menu Nổi Kéo Không Mất</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LED Góc Cứng – Segment7</title>
+  <link href="https://fonts.cdnfonts.com/css/segment7" rel="stylesheet">
   <style>
+    * { margin:0; padding:0; box-sizing:border-box; user-select:none; }
     body {
-      margin: 0;
-      height: 100vh;
+      height:100vh;
       background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
-      font-family: Arial, sans-serif;
-      overflow: hidden;
+      display:flex; justify-content:center; align-items:center;
+      font-family:'Segment7', monospace;
+      color:#00ffcc;
     }
-
-    #floatingBtn {
-      position: absolute;
-      top: 30px;
-      left: 30px;
-      width: 70px;
-      height: 70px;
-      background-color: #00bcd4;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 32px;
-      cursor: grab;
-      z-index: 999;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      user-select: none;
+    .dashboard {
+      background:#0b1a24;
+      border-radius:12px;
+      padding:40px;
+      box-shadow:0 0 30px rgba(0,255,255,0.4);
+      text-align:center;
     }
-
-    #menuContent {
-      position: absolute;
-      top: 110px;
-      left: 30px;
-      background: rgba(0, 0, 0, 0.85);
-      padding: 15px;
-      border-radius: 12px;
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 998;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    .speed-box {
+      border:4px solid #00ffe0;
+      border-radius:4px;
+      background:#000;
+      display:inline-block;
+      padding:10px 20px;
+      font-size:60px;
+      min-width:140px;
     }
-
-    #menuContent button {
-      padding: 12px 18px;
-      background-color: #ff5252;
-      border: none;
-      color: white;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      width: 160px;
+    .unit { font-size:20px; margin-left:5px; }
+    .info-row {
+      display:flex; justify-content:space-between;
+      margin-top:20px; font-size:20px;
     }
-
-    #menuContent button:hover {
-      background-color: #e53935;
+    .controls {
+      margin-top:30px;
+      display:flex; flex-direction:column; gap:15px;
     }
-
-    #menuContent .secondary {
-      background-color: #4caf50;
+    button {
+      padding:12px;
+      font-size:18px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
     }
-
-    #menuContent .secondary:hover {
-      background-color: #388e3c;
-    }
+    .gas { background:#009688; color:#fff; }
+    .gas:active { background:#00796b; }
+    .toggle { background:#333; color:#fff; }
   </style>
 </head>
 <body>
+  <div class="dashboard">
+    <h1 style="font-size:24px; margin-bottom:10px;">PEGA</h1>
+    <div class="speed-box"><span id="speed">0</span><span class="unit">km/h</span></div>
+    <div class="info-row">
+      <div>🔋 <span id="battery">100%</span></div>
+      <div id="mode">Tiến</div>
+    </div>
+    <div class="controls">
+      <button class="gas" id="gasBtn">⏫ Kéo Ga</button>
+      <button class="toggle" id="toggleBtn">Chuyển Tiến/Lùi</button>
+    </div>
+  </div>
 
-<div id="floatingBtn" title="Menu">☰</div>
+  <script>
+    let speed = 0,
+        battery = 100,
+        isPressed = false,
+        isReverse = false;
 
-<div id="menuContent">
-  <button onclick="resetPage()">🔄 Reset trang</button>
-  <button class="secondary" onclick="openNewTab()">🆕 Mở tab mới</button>
-</div>
+    const speedEl = document.getElementById('speed'),
+          batEl = document.getElementById('battery'),
+          modeEl = document.getElementById('mode'),
+          gasBtn = document.getElementById('gasBtn'),
+          togg = document.getElementById('toggleBtn');
 
-<script>
-  const btn = document.getElementById("floatingBtn");
-  const menu = document.getElementById("menuContent");
+    gasBtn.addEventListener('mousedown', () => isPressed = true);
+    gasBtn.addEventListener('touchstart', () => isPressed = true);
 
-  let isDragging = false;
-  let offsetX = 0, offsetY = 0;
-  let moved = false;
+    window.addEventListener('mouseup', () => isPressed = false);
+    window.addEventListener('touchend', () => isPressed = false);
 
-  const startDrag = (e) => {
-    isDragging = true;
-    moved = false;
+    togg.addEventListener('click', () => {
+      isReverse = !isReverse;
+      modeEl.textContent = isReverse ? 'Lùi' : 'Tiến';
+      if (isReverse && speed > 20) speed = 20;
+    });
 
-    const evt = e.touches ? e.touches[0] : e;
-    offsetX = evt.clientX - btn.offsetLeft;
-    offsetY = evt.clientY - btn.offsetTop;
+    setInterval(() => {
+      if (isPressed) {
+        let max = isReverse ? 20 : 99;
+        if (speed < max) speed++;
+      } else {
+        if (speed > 0) speed--;
+      }
+      speedEl.textContent = speed;
+    }, 100);
 
-    document.addEventListener('mousemove', onDrag);
-    document.addEventListener('mouseup', endDrag);
-    document.addEventListener('touchmove', onDrag, { passive: false });
-    document.addEventListener('touchend', endDrag);
-  };
-
-  const onDrag = (e) => {
-    if (!isDragging) return;
-
-    const evt = e.touches ? e.touches[0] : e;
-    const maxX = window.innerWidth - btn.offsetWidth;
-    const maxY = window.innerHeight - btn.offsetHeight;
-
-    let x = evt.clientX - offsetX;
-    let y = evt.clientY - offsetY;
-
-    x = Math.max(0, Math.min(x, maxX));
-    y = Math.max(0, Math.min(y, maxY));
-
-    btn.style.left = `${x}px`;
-    btn.style.top = `${y}px`;
-
-    menu.style.left = `${x}px`;
-    menu.style.top = `${y + 80}px`;
-
-    moved = true;
-
-    e.preventDefault(); // ngăn cuộn khi kéo trên mobile
-  };
-
-  const endDrag = () => {
-    isDragging = false;
-    document.removeEventListener('mousemove', onDrag);
-    document.removeEventListener('mouseup', endDrag);
-    document.removeEventListener('touchmove', onDrag);
-    document.removeEventListener('touchend', endDrag);
-  };
-
-  btn.addEventListener("click", () => {
-    if (!moved) {
-      menu.style.display = (menu.style.display === "none") ? "flex" : "none";
-    }
-  });
-
-  btn.addEventListener("mousedown", startDrag);
-  btn.addEventListener("touchstart", startDrag);
-
-  function resetPage() {
-    location.reload();
-  }
-
-  function openNewTab() {
-    window.open(window.location.href, "_blank");
-  }
-</script>
-
+    setInterval(() => {
+      if (battery > 0) {
+        battery--;
+        batEl.textContent = battery + '%';
+      }
+    }, 120000);
+  </script>
 </body>
 </html>
