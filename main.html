@@ -2,138 +2,78 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI Thông Minh - VIP</title>
+  <title>VIP Tab Killer 🔥</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
-
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Rubik Mono One', sans-serif;
       background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
+      margin: 0;
       overflow: hidden;
+      font-family: 'Rubik Mono One', sans-serif;
     }
 
-    h1 {
-      color: #00ffe0;
-      font-size: 28px;
-      margin-bottom: 20px;
-      animation: glow 3s ease-in-out infinite;
-    }
-
-    @keyframes glow {
-      0%, 100% { text-shadow: 0 0 8px #00ffe0; }
-      50% { text-shadow: 0 0 16px #00ffff; }
-    }
-
-    textarea {
-      width: 90%;
-      max-width: 500px;
-      height: 100px;
+    .tab-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 16px 22px;
       font-size: 16px;
-      padding: 12px;
-      border-radius: 10px;
-      border: 2px solid #00ffe0;
-      background: #111;
       color: #00ffe0;
-      resize: none;
-      margin-bottom: 12px;
-      outline: none;
-    }
-
-    button {
-      padding: 12px 24px;
-      font-size: 16px;
-      background: rgba(0,255,255,0.1);
+      background: rgba(0, 255, 255, 0.1);
       border: 2px solid #00ffe0;
-      border-radius: 10px;
-      color: #00ffe0;
+      border-radius: 12px;
       cursor: pointer;
-      transition: 0.3s;
-      box-shadow: 0 0 12px rgba(0,255,255,0.4);
+      z-index: 9999;
+      box-shadow: 0 0 15px rgba(0,255,255,0.4);
+      backdrop-filter: blur(6px);
+      transition: 0.3s ease;
+      animation: pulseBtn 2s infinite;
     }
 
-    button:hover {
+    .tab-btn:hover {
       background: rgba(0,255,255,0.3);
       color: #fff;
+      box-shadow: 0 0 25px #00ffe0;
     }
 
-    #response {
-      margin-top: 20px;
-      max-width: 90%;
-      width: 500px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 16px;
-      border-radius: 10px;
-      white-space: pre-wrap;
-      backdrop-filter: blur(6px);
-    }
-
-    audio {
-      display: none;
+    @keyframes pulseBtn {
+      0%, 100% {
+        box-shadow: 0 0 12px rgba(0,255,255,0.3);
+      }
+      50% {
+        box-shadow: 0 0 25px rgba(0,255,255,0.6);
+      }
     }
   </style>
 </head>
 <body>
 
-  <h1>🤖 AI Thông Minh - VIP Pro</h1>
-
-  <textarea id="userInput" placeholder="Nhập câu hỏi cho AI..."></textarea>
-  <button onclick="sendMessage()">Gửi 🧠</button>
-
-  <div id="response"></div>
-
-  <!-- Nhạc nền tự động -->
-  <audio autoplay loop>
-    <source src="nhac.mp3" type="audio/mpeg">
-  </audio>
+  <button class="tab-btn" onclick="closeAllTabs()">🗡 Đóng tất cả Tab</button>
 
   <script>
-    const apiKey = "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";
+    // Giả lập các tab đã mở
+    const openedTabs = [];
 
-    async function sendMessage() {
-      const input = document.getElementById("userInput").value.trim();
-      if (!input) return;
-
-      document.getElementById("response").innerText = "⏳ Đang phản hồi...";
-
-      const payload = {
-        model: "gpt-3.5-turbo",
-        messages: [
-          { role: "user", content: input }
-        ]
-      };
-
-      try {
-        const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://api.openai.com/v1/chat/completions");
-
-        const res = await fetch(proxyUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiKey}`
-          },
-          body: JSON.stringify(payload)
-        });
-
-        const data = await res.json();
-        const message = data.choices?.[0]?.message?.content || "❌ Không có phản hồi.";
-
-        document.getElementById("response").innerText = message;
-
-      } catch (err) {
-        document.getElementById("response").innerText = "❌ Lỗi khi phản hồi!";
-        console.error(err);
-      }
+    // Bạn có thể mở tab bằng hàm này nếu muốn thử nghiệm
+    function openTab(url = 'https://example.com') {
+      const tab = window.open(url, '_blank');
+      if (tab) openedTabs.push(tab);
     }
+
+    function closeAllTabs() {
+      let closed = 0;
+      openedTabs.forEach(tab => {
+        try {
+          tab.close();
+          closed++;
+        } catch {}
+      });
+      alert(`✅ Đã đóng ${closed} tab được mở từ script!`);
+    }
+
+    // Gợi ý: Mở thử vài tab test
+    // openTab(); openTab(); openTab();
   </script>
+
 </body>
 </html>
