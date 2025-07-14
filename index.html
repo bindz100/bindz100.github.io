@@ -4,38 +4,8 @@
   <meta charset="UTF-8" />
   <title>Welcome to Bindz</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- ✅ CHẶN TRUY CẬP nếu không có key -->
-  <script>
-    const hashKey = location.hash.replace("#key=", "").trim();
-    const validKey = "BINDZ-24H--shjwi188cbakajdb";
-
-    if (hashKey === validKey) {
-      localStorage.setItem("bindz_verified", "yes");
-      history.replaceState(null, "", location.pathname); // ẩn hash
-    }
-
-    if (localStorage.getItem("bindz_verified") !== "yes") {
-      document.write(`
-        <style>
-          body {
-            background: black;
-            color: white;
-            font-family: sans-serif;
-            text-align: center;
-            padding-top: 100px;
-          }
-        </style>
-        <body>
-          <h1>🚫 Truy cập bị chặn</h1>
-          <p>Bạn cần mở trang này từ <b>Phím tắt</b> (Shortcuts) có nhập đúng KEY.</p>
-        </body>
-      `);
-      throw new Error("Người dùng chưa được xác thực.");
-    }
-  </script>
-
-  <!-- Toàn bộ phần còn lại giữ nguyên -->
+  
+  <!-- Phần style giữ nguyên -->
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
     * {
@@ -154,7 +124,7 @@
       document.getElementById('startBtn').style.display = 'inline-block';
     }, 2500);
 
-    // Bắt đầu loading
+    // Khi nhấn Bắt đầu
     document.getElementById('startBtn').addEventListener('click', () => {
       document.getElementById('startBtn').style.display = 'none';
       const progressContainer = document.getElementById('progressContainer');
