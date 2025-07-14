@@ -1,79 +1,42 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>VIP Tab Killer 🔥</title>
+  <meta charset="UTF-8">
+  <title>Football FPS</title>
   <style>
-    body {
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      height: 100vh;
-      margin: 0;
-      overflow: hidden;
-      font-family: 'Rubik Mono One', sans-serif;
-    }
-
-    .tab-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 16px 22px;
-      font-size: 16px;
-      color: #00ffe0;
-      background: rgba(0, 255, 255, 0.1);
-      border: 2px solid #00ffe0;
-      border-radius: 12px;
+    body { margin: 0; overflow: hidden; background: #000; }
+    canvas { display: block; }
+    #instructions {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
       cursor: pointer;
-      z-index: 9999;
-      box-shadow: 0 0 15px rgba(0,255,255,0.4);
-      backdrop-filter: blur(6px);
-      transition: 0.3s ease;
-      animation: pulseBtn 2s infinite;
+      z-index: 2;
     }
-
-    .tab-btn:hover {
-      background: rgba(0,255,255,0.3);
-      color: #fff;
-      box-shadow: 0 0 25px #00ffe0;
-    }
-
-    @keyframes pulseBtn {
-      0%, 100% {
-        box-shadow: 0 0 12px rgba(0,255,255,0.3);
-      }
-      50% {
-        box-shadow: 0 0 25px rgba(0,255,255,0.6);
-      }
+    #goalText {
+      position: absolute;
+      top: 30%;
+      width: 100%;
+      text-align: center;
+      font-size: 48px;
+      color: yellow;
+      display: none;
+      z-index: 3;
     }
   </style>
 </head>
 <body>
+  <div id="instructions">Click để bắt đầu chơi ⚽️</div>
+  <div id="goalText">GOOOOOAL!!! 🎉</div>
 
-  <button class="tab-btn" onclick="closeAllTabs()">🗡 Đóng tất cả Tab</button>
-
-  <script>
-    // Giả lập các tab đã mở
-    const openedTabs = [];
-
-    // Bạn có thể mở tab bằng hàm này nếu muốn thử nghiệm
-    function openTab(url = 'https://example.com') {
-      const tab = window.open(url, '_blank');
-      if (tab) openedTabs.push(tab);
-    }
-
-    function closeAllTabs() {
-      let closed = 0;
-      openedTabs.forEach(tab => {
-        try {
-          tab.close();
-          closed++;
-        } catch {}
-      });
-      alert(`✅ Đã đóng ${closed} tab được mở từ script!`);
-    }
-
-    // Gợi ý: Mở thử vài tab test
-    // openTab(); openTab(); openTab();
-  </script>
-
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/PointerLockControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/vuotlinkpro/football-fps@main/script.js"></script>
 </body>
 </html>
