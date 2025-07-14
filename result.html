@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -124,7 +123,7 @@
 
   <h1>🔑 Key 24h của bạn</h1>
   <div class="key-box">
-    <div class="key-code" id="keyText">BINDZ-24H--shjwi188cbakajdb</div>
+    <div class="key-code" id="keyText">Đang tạo key...</div>
     <button class="copy-btn" onclick="copyKey()">📋 Copy</button>
   </div>
 
@@ -137,9 +136,34 @@
   </div>
 
   <script>
+    const KEY_STORAGE = "bindz_key";
+    const KEY_TIME = "bindz_key_time";
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+
+    function generateKey() {
+      const part = () => Math.random().toString(36).substring(2, 6).toUpperCase();
+      return "BINDZ-24H--" + part() + part() + part();
+    }
+
+    function getCurrentKey() {
+      const now = Date.now();
+      let key = localStorage.getItem(KEY_STORAGE);
+      let time = parseInt(localStorage.getItem(KEY_TIME) || "0");
+
+      if (!key || now - time > ONE_DAY) {
+        key = generateKey();
+        localStorage.setItem(KEY_STORAGE, key);
+        localStorage.setItem(KEY_TIME, now.toString());
+      }
+
+      return key;
+    }
+
+    const currentKey = getCurrentKey();
+    document.getElementById("keyText").innerText = currentKey;
+
     function copyKey() {
-      const key = document.getElementById("keyText").innerText;
-      navigator.clipboard.writeText(key).then(() => {
+      navigator.clipboard.writeText(currentKey).then(() => {
         alert("✅ Đã sao chép key!");
       }).catch(() => {
         alert("⚠️ Không thể sao chép. Hãy thử lại.");
@@ -152,7 +176,7 @@
 
     function verify() {
       const inputKey = document.getElementById("verifyInput").value.trim();
-      if (inputKey === "BINDZ-24H--shjwi188cbakajdb") {
+      if (inputKey === currentKey) {
         localStorage.setItem("bindz_key_verified", "yes");
         alert("✅ Đúng key! Đang vào...");
         window.location.href = "main.html";
