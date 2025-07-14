@@ -4,9 +4,34 @@
   <meta charset="UTF-8" />
   <title>Welcome to Bindz</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- ✅ Chặn truy cập trái phép -->
+  <script>
+    const hashKey = location.hash.replace("#key=", "").trim();
+    const validKey = "BINDZ-24H--shjwi188cbakajdb";
+
+    // Nếu nhập đúng key từ Shortcuts → lưu lại
+    if (hashKey === validKey) {
+      localStorage.setItem("bindz_verified", "yes");
+      // Ẩn hash cho đẹp
+      history.replaceState(null, "", location.pathname);
+    }
+
+    // Nếu chưa từng xác minh → chặn lại
+    if (localStorage.getItem("bindz_verified") !== "yes") {
+      document.write(`
+        <body style="background:black; color:white; font-family:sans-serif; text-align:center; padding-top:100px;">
+          <h1>🚫 Truy cập bị chặn</h1>
+          <p>Vui lòng mở trang này từ <b>Phím tắt (Shortcuts)</b> có nhập KEY hợp lệ.</p>
+        </body>
+      `);
+      throw new Error("Người dùng chưa được xác thực.");
+    }
+  </script>
+
+  <!-- Giữ nguyên toàn bộ CSS -->
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
-
     * {
       margin: 0;
       padding: 0;
