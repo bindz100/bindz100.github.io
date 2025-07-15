@@ -1,0 +1,6 @@
+body { margin:0; padding:0; font-family:Arial,sans-serif; background:#70c5ce; overflow:hidden; }
+canvas { display:block; margin:auto; background:#70c5ce; }
+#version { position:fixed; top:5px; left:5px; font-size:10px; color:#999; }
+#playerInfo { position:fixed; top:5px; right:5px; background:rgba(255,255,255,0.8); padding:5px; border-radius:4px; }
+#banned { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fdd; padding:20px; border:2px solid #900; display:none; }
+button { margin-left:5px; }
