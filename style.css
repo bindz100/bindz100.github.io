@@ -1,0 +1,106 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: #1a1a2e; /* Nền tối, sang trọng */
+    color: #f0f0f0;
+    text-align: center;
+    overflow: hidden; /* Ngăn chặn cuộn trang khi có hiệu ứng */
+    position: relative;
+}
+
+/* Hiệu ứng nền chuyển động */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #ff0055, #ff5e00, #ffba00, #aaff00, #00fff2, #006cff, #a200ff);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    z-index: -1;
+    opacity: 0.2;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container {
+    padding: 40px;
+    background: rgba(46, 52, 64, 0.8); /* Nền bán trong suốt để thấy hiệu ứng phía sau */
+    border-radius: 20px;
+    backdrop-filter: blur(10px); /* Hiệu ứng làm mờ nền phía sau */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Bóng mượt, sâu hơn */
+    width: 350px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-5px); /* Hiệu ứng nhấc lên khi di chuột */
+}
+
+h1.rainbow-text {
+    font-size: 2.5em;
+    font-weight: bold;
+    background: linear-gradient(to right, #ff0055, #ffba00, #00fff2, #a200ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rainbowText 5s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes rainbowText {
+    to { background-position: 200% center; }
+}
+
+input {
+    width: 90%;
+    padding: 12px;
+    margin: 20px 0;
+    border: none;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1em;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3), 0 0 10px #ff0055;
+}
+
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #a200ff, #00fff2);
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(45deg, #00fff2, #a200ff);
+}
+
+#message {
+    margin-top: 20px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
