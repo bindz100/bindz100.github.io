@@ -1,99 +1,18 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>WELCOME VIP8</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Rubik Mono One', sans-serif;
-      background: #000;
-    }
-
-    /* 🔥 Nền sóng biển động */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://media.giphy.com/media/QZkpIdieotn3i/giphy.gif') center/cover no-repeat;
-      z-index: -2;
-      opacity: 0.25;
-      filter: blur(2px);
-    }
-
-    /* 🌈 Animation cầu vồng */
-    @keyframes rainbow {
-      0% { color: red; }
-      16% { color: orange; }
-      32% { color: yellow; }
-      48% { color: green; }
-      64% { color: blue; }
-      80% { color: indigo; }
-      100% { color: violet; }
-    }
-
-    /* 🎉 Hiệu ứng xuất hiện từng chữ */
-    .welcome-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      gap: 8px;
-      animation: fadeIn 2s ease-in-out;
-    }
-
-    .letter {
-      font-size: 40px;
-      animation: rainbow 3s infinite linear, pop 0.6s ease forwards;
-      opacity: 0;
-    }
-
-    @keyframes pop {
-      0% {
-        transform: scale(0.5);
-        opacity: 0;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Chào mừng bạn!</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="welcome-container" id="welcome">
-    <!-- Các chữ sẽ được tạo bằng JS -->
-  </div>
-
-  <script>
-    const text = "WELCOME";
-    const container = document.getElementById('welcome');
-
-    [...text].forEach((char, index) => {
-      const span = document.createElement('span');
-      span.textContent = char;
-      span.className = 'letter';
-      span.style.animationDelay = `${index * 0.2}s`;
-      container.appendChild(span);
-    });
-  </script>
+    <div class="container">
+        <h1 class="rainbow-text">Chào mừng bạn!</h1>
+        <p>Vui lòng nhập API Key để bắt đầu chơi:</p>
+        <input type="text" id="apiKeyInput" placeholder="Nhập API Key của bạn...">
+        <button id="submitBtn">Bắt đầu</button>
+        <p id="message"></p>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
