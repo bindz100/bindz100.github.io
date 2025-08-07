@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>🌊 Welcome Wave</title>
+  <title>WELCOME VIP8</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
@@ -13,89 +13,87 @@
       box-sizing: border-box;
     }
 
-    body {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      background: #0f2027;  /* fallback */
+    html, body {
+      width: 100%;
+      height: 100%;
       overflow: hidden;
       font-family: 'Rubik Mono One', sans-serif;
+      background: #000;
     }
 
-    /* Hiệu ứng sóng biển */
-    body::before, body::after {
+    /* 🔥 Nền sóng biển động */
+    body::before {
       content: "";
-      position: absolute;
-      width: 200%;
-      height: 200%;
-      top: -50%;
-      left: -50%;
-      background: radial-gradient(circle at center, #00c6ff 0%, #0072ff 100%);
-      animation: oceanWaves 20s linear infinite;
-      z-index: -1;
-      opacity: 0.4;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://media.giphy.com/media/QZkpIdieotn3i/giphy.gif') center/cover no-repeat;
+      z-index: -2;
+      opacity: 0.25;
+      filter: blur(2px);
     }
 
-    body::after {
-      animation-delay: -10s;
-      transform: rotate(180deg);
-      opacity: 0.3;
+    /* 🌈 Animation cầu vồng */
+    @keyframes rainbow {
+      0% { color: red; }
+      16% { color: orange; }
+      32% { color: yellow; }
+      48% { color: green; }
+      64% { color: blue; }
+      80% { color: indigo; }
+      100% { color: violet; }
     }
 
-    @keyframes oceanWaves {
-      0% { transform: rotate(0deg) scale(1.1); }
-      100% { transform: rotate(360deg) scale(1.1); }
-    }
-
-    .welcome-text {
+    /* 🎉 Hiệu ứng xuất hiện từng chữ */
+    .welcome-container {
       display: flex;
-      margin-top: 80px;
-      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      gap: 8px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .letter {
+      font-size: 40px;
+      animation: rainbow 3s infinite linear, pop 0.6s ease forwards;
       opacity: 0;
     }
 
-    .welcome-text span {
-      font-size: 60px;
-      opacity: 0;
-      animation: showChar 0.5s forwards, rainbowText 5s linear infinite;
-      animation-delay: calc(var(--i) * 0.3s);
-      background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-size: 300%;
+    @keyframes pop {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
-    @keyframes showChar {
-      0% { opacity: 0; transform: translateY(-30px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes rainbowText {
-      0% { background-position: 0%; }
-      100% { background-position: 300%; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-
-  <div id="welcome" class="welcome-text">
-    <span style="--i:0">W</span>
-    <span style="--i:1">E</span>
-    <span style="--i:2">L</span>
-    <span style="--i:3">C</span>
-    <span style="--i:4">O</span>
-    <span style="--i:5">M</span>
-    <span style="--i:6">E</span>
+  <div class="welcome-container" id="welcome">
+    <!-- Các chữ sẽ được tạo bằng JS -->
   </div>
 
   <script>
-    // Delay xuất hiện chữ
-    window.addEventListener("load", () => {
-      document.getElementById("welcome").style.opacity = "1";
+    const text = "WELCOME";
+    const container = document.getElementById('welcome');
+
+    [...text].forEach((char, index) => {
+      const span = document.createElement('span');
+      span.textContent = char;
+      span.className = 'letter';
+      span.style.animationDelay = `${index * 0.2}s`;
+      container.appendChild(span);
     });
   </script>
-
 </body>
 </html>
