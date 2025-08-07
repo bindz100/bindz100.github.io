@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>🌈 Welcome Main</title>
+  <title>🌈 Welcome</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
@@ -15,44 +15,47 @@
 
     body {
       height: 100vh;
-      background: linear-gradient(270deg, #ff416c, #ff4b2b, #1e90ff, #28a745, #ffdd00, #9b00ff);
-      background-size: 2000% 2000%;
-      animation: rainbowBg 15s ease infinite;
+      background: linear-gradient(270deg, #ff0000, #ff9900, #ffff00, #33cc33, #3399ff, #9900cc, #ff0066);
+      background-size: 500% 500%;
+      animation: bgMove 12s ease infinite;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
       font-family: 'Rubik Mono One', sans-serif;
+      overflow: hidden;
+      flex-direction: column;
     }
 
-    @keyframes rainbowBg {
+    @keyframes bgMove {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
-    .circle {
-      position: absolute;
-      width: 200px;
-      height: 200px;
+    .shine-circle {
+      width: 180px;
+      height: 180px;
       border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, white, #ff00cc, #00ccff);
-      box-shadow: 0 0 40px rgba(255,255,255,0.4);
+      background: radial-gradient(circle at 30% 30%, white, #00ffff, #9900ff);
+      box-shadow: 0 0 50px rgba(255, 255, 255, 0.4);
       animation: float 4s ease-in-out infinite;
+      position: absolute;
+      top: 20%;
     }
 
     @keyframes float {
       0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-20px); }
+      50% { transform: translateY(-15px); }
     }
 
     .spinner {
-      border: 8px solid rgba(255, 255, 255, 0.1);
-      border-top: 8px solid #ffffff;
+      width: 90px;
+      height: 90px;
+      border: 6px solid rgba(255, 255, 255, 0.1);
+      border-top: 6px solid white;
       border-radius: 50%;
-      width: 100px;
-      height: 100px;
       animation: spinOnce 2s ease-out forwards;
+      margin-bottom: 30px;
     }
 
     @keyframes spinOnce {
@@ -61,26 +64,20 @@
     }
 
     .welcome-text {
-      font-size: 50px;
-      color: white;
       display: flex;
       gap: 10px;
       opacity: 0;
-      margin-top: 20px;
     }
 
     .welcome-text span {
+      font-size: 60px;
       opacity: 0;
-      animation: showChar 0.5s forwards;
+      animation: showChar 0.5s forwards, rainbowText 4s linear infinite;
       animation-delay: calc(var(--i) * 0.3s);
       background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-size: 400%;
-      animation-name: showChar, rainbowText;
-      animation-duration: 0.5s, 4s;
-      animation-iteration-count: 1, infinite;
-      animation-fill-mode: forwards;
+      background-size: 300%;
     }
 
     @keyframes showChar {
@@ -90,16 +87,17 @@
 
     @keyframes rainbowText {
       0% { background-position: 0%; }
-      100% { background-position: 400%; }
+      100% { background-position: 300%; }
     }
   </style>
 </head>
 <body>
-  <div class="circle"></div>
+
+  <div class="shine-circle"></div>
 
   <div id="spinnerContainer" class="spinner"></div>
 
-  <div id="welcome" class="welcome-text" style="display:none;">
+  <div id="welcome" class="welcome-text" style="display: none;">
     <span style="--i:0">W</span>
     <span style="--i:1">E</span>
     <span style="--i:2">L</span>
@@ -110,11 +108,14 @@
   </div>
 
   <script>
-    // Sau khi xoay xong 2s thì hiện chữ welcome
+    // 2 giây sau vòng xoáy thì hiện WELCOME
     setTimeout(() => {
       document.getElementById("spinnerContainer").style.display = "none";
-      document.getElementById("welcome").style.display = "flex";
+      const welcome = document.getElementById("welcome");
+      welcome.style.display = "flex";
+      welcome.style.opacity = "1";
     }, 2000);
   </script>
+
 </body>
 </html>
