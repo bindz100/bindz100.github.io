@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>🌈 Welcome Main</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(270deg, #ff416c, #ff4b2b, #1e90ff, #28a745, #ffdd00, #9b00ff);
+      background-size: 2000% 2000%;
+      animation: rainbowBg 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      font-family: 'Rubik Mono One', sans-serif;
+    }
+
+    @keyframes rainbowBg {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .circle {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, white, #ff00cc, #00ccff);
+      box-shadow: 0 0 40px rgba(255,255,255,0.4);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .spinner {
+      border: 8px solid rgba(255, 255, 255, 0.1);
+      border-top: 8px solid #ffffff;
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      animation: spinOnce 2s ease-out forwards;
+    }
+
+    @keyframes spinOnce {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); opacity: 0; }
+    }
+
+    .welcome-text {
+      font-size: 50px;
+      color: white;
+      display: flex;
+      gap: 10px;
+      opacity: 0;
+      margin-top: 20px;
+    }
+
+    .welcome-text span {
+      opacity: 0;
+      animation: showChar 0.5s forwards;
+      animation-delay: calc(var(--i) * 0.3s);
+      background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 400%;
+      animation-name: showChar, rainbowText;
+      animation-duration: 0.5s, 4s;
+      animation-iteration-count: 1, infinite;
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes showChar {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes rainbowText {
+      0% { background-position: 0%; }
+      100% { background-position: 400%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="circle"></div>
+
+  <div id="spinnerContainer" class="spinner"></div>
+
+  <div id="welcome" class="welcome-text" style="display:none;">
+    <span style="--i:0">W</span>
+    <span style="--i:1">E</span>
+    <span style="--i:2">L</span>
+    <span style="--i:3">C</span>
+    <span style="--i:4">O</span>
+    <span style="--i:5">M</span>
+    <span style="--i:6">E</span>
+  </div>
+
+  <script>
+    // Sau khi xoay xong 2s thì hiện chữ welcome
+    setTimeout(() => {
+      document.getElementById("spinnerContainer").style.display = "none";
+      document.getElementById("welcome").style.display = "flex";
+    }, 2000);
+  </script>
+</body>
+</html>
