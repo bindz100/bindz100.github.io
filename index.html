@@ -10,7 +10,6 @@
     --glass-bg:rgba(255,255,255,0.10);
     --glass-stroke:rgba(255,255,255,0.35);
     --shadow: 0 10px 30px rgba(0,0,0,.35);
-    --rainbow-size: 280%;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
   html,body{height:100%;margin:0;background:#0b0e14;color:#fff;font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;overflow:hidden;}
@@ -54,14 +53,14 @@
     box-shadow: 0 10px 20px rgba(0,0,0,.45), inset 0 0 10px rgba(255,255,255,.08);
     cursor:pointer;
     user-select:none;
+    overflow:hidden;
   }
-  .hack-btn .cat{
-    font-size:28px; filter: drop-shadow(0 1px 0 rgba(0,0,0,.35));
-    transform: translateY(-1px);
+  .hack-btn img{
+    width:70%; height:70%; object-fit:cover; border-radius:50%;
   }
   .hack-btn:active{ transform: translateY(1px) scale(.98); }
 
-  /* Hack menu (rainbow border + glass inside) */
+  /* Hack menu (rainbow border) */
   .menu-shell{
     position:fixed; right:10px; bottom:90px; z-index:60; display:none;
   }
@@ -72,11 +71,11 @@
       conic-gradient(from 0deg,
       #ff0066, #ff7a00, #ffee00, #39ff14, #00f5ff, #5866ff, #b400ff, #ff0066);
     animation: spin 6s linear infinite;
-    filter: saturate(1.2);
   }
-  @keyframes spin{ to{ transform: rotate(1turn); } }
+  @keyframes spin{ to{ background-position: 360deg; transform: rotate(360deg); } }
 
   .menu-card{
+    position:relative;
     width: 280px; max-width: 88vw;
     border-radius: calc(var(--menu-radius) - 2px);
     background:
@@ -96,10 +95,11 @@
   }
   .menu-head:active{ cursor:grabbing; }
   .menu-ico{
-    width:28px; height:28px; border-radius:50%; display:grid; place-items:center;
-    background: radial-gradient(70% 70% at 30% 30%, rgba(255,255,255,.35), transparent 60%),
-                linear-gradient(135deg,#1f2338,#1a2a3d);
-    border:1px solid rgba(255,255,255,.35);
+    width:28px; height:28px; border-radius:50%; overflow:hidden;
+    display:grid; place-items:center;
+  }
+  .menu-ico img{
+    width:100%; height:100%; object-fit:cover;
   }
   .menu-title{ font-weight:800; letter-spacing:.3px; }
   .menu-body{ padding:12px; display:grid; gap:12px; }
@@ -149,10 +149,8 @@
     font-size:11px; opacity:.75; padding:0 12px 12px 12px; text-align:center;
   }
 
-  /* Toggle visible */
   .menu-shell.show{ display:block; }
 
-  /* Helper: tiny watermark version */
   .ver{
     position:fixed; left:10px; bottom:10px; opacity:.4; font-size:11px;
     letter-spacing:.4px; z-index:1;
@@ -169,17 +167,15 @@
     </div>
   </div>
 
-  <!-- Floating meme cat button -->
-  <button class="hack-btn" id="hackBtn" aria-label="Mở Hack Menu">
-    <span class="cat">😼</span>
+  <button class="hack-btn" id="hackBtn">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjltzX_PNVIeWxq_6aQEkw4WVMWpAcg9SthKlM27fKdQ&s" alt="cat">
   </button>
 
-  <!-- Hack Menu -->
   <div class="menu-shell" id="menu">
     <div class="menu-rainbow">
       <div class="menu-card" id="menuCard">
         <div class="menu-head" id="menuDrag">
-          <div class="menu-ico">😼</div>
+          <div class="menu-ico"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjltzX_PNVIeWxq_6aQEkw4WVMWpAcg9SthKlM27fKdQ&s"></div>
           <div class="menu-title">Birch Hack Menu</div>
         </div>
         <div class="menu-body">
@@ -206,109 +202,67 @@
 
 <script>
 (() => {
-  /* ========= Simple Flappy Birch ========= */
   const cvs = document.getElementById('game');
   const ctx = cvs.getContext('2d');
 
   const W = cvs.width, H = cvs.height;
-
-  // Game state
   let running = true;
   let score = 0, best = +localStorage.getItem('fb_best') || 0;
   document.getElementById('best').textContent = best;
 
-  // Speed multiplier controlled by hack menu
   let speedMult = 1;
   const speedLabel = document.getElementById('spdlabel');
 
-  // Bird
-  const bird = {
-    x: W * 0.28,
-    y: H * 0.45,
-    r: 12,
-    vy: 0,
-    gravity: 0.48,
-    jumpV: -7.6,
-  };
-
-  // Pipes
+  const bird = { x: W * 0.28, y: H * 0.45, r: 12, vy: 0, gravity: 0.48, jumpV: -7.6 };
   const pipes = [];
   const pipeW = 60;
   let gap = 150;
-  let basePipeSpeed = 2.2; // pixels per frame at 60fps
+  let basePipeSpeed = 2.2;
   let spawnEveryMs = 1400;
   let lastSpawn = 0;
 
-  function resetGame() {
-    score = 0;
-    bird.y = H * 0.45;
-    bird.vy = 0;
-    pipes.length = 0;
-    lastSpawn = 0;
-    running = true;
+  function resetGame(){
+    score = 0; bird.y = H * 0.45; bird.vy = 0;
+    pipes.length = 0; lastSpawn = 0; running = true;
   }
-
-  function spawnPipe() {
+  function spawnPipe(){
     const margin = 70;
     const gapY = margin + Math.random() * (H - margin*2 - gap);
     pipes.push({ x: W + pipeW, gapY, passed:false });
   }
-
-  function drawBird() {
-    // body
-    ctx.save();
-    ctx.translate(bird.x, bird.y);
+  function drawBird(){
+    ctx.save(); ctx.translate(bird.x, bird.y);
     const tilt = Math.max(-0.5, Math.min(0.5, bird.vy/10));
     ctx.rotate(tilt);
-    // body
     const grd = ctx.createLinearGradient(-15,-15, 20, 20);
-    grd.addColorStop(0, '#ffe66d');
-    grd.addColorStop(1, '#ff9f1c');
-    ctx.fillStyle = grd;
-    roundRect(ctx,-16,-12,32,24,12,true,false);
-    // wing
-    ctx.fillStyle = 'rgba(255,255,255,.9)';
-    roundRect(ctx,-8,-6,16,12,6,true,false);
-    // eye
+    grd.addColorStop(0, '#ffe66d'); grd.addColorStop(1, '#ff9f1c');
+    ctx.fillStyle = grd; roundRect(ctx,-16,-12,32,24,12,true,false);
+    ctx.fillStyle = 'rgba(255,255,255,.9)'; roundRect(ctx,-8,-6,16,12,6,true,false);
     ctx.beginPath(); ctx.fillStyle='#fff'; ctx.arc(6,-4,4,0,Math.PI*2); ctx.fill();
     ctx.beginPath(); ctx.fillStyle='#222'; ctx.arc(7,-4,2,0,Math.PI*2); ctx.fill();
-    // beak
-    ctx.fillStyle = '#ffd166';
-    roundRect(ctx,14,-2,10,6,3,true,false);
+    ctx.fillStyle = '#ffd166'; roundRect(ctx,14,-2,10,6,3,true,false);
     ctx.restore();
   }
-
-  function drawPipes() {
-    ctx.fillStyle = '#2ecc71';
-    ctx.strokeStyle = '#27ae60';
-    ctx.lineWidth = 4;
-    pipes.forEach(p => {
-      // top
-      ctx.beginPath();
-      ctx.rect(p.x, 0, pipeW, p.gapY);
-      ctx.fill(); ctx.stroke();
-      // bottom
-      ctx.beginPath();
-      ctx.rect(p.x, p.gapY + gap, pipeW, H - (p.gapY + gap));
-      ctx.fill(); ctx.stroke();
-      // lips
+  function drawPipes(){
+    ctx.fillStyle = '#2ecc71'; ctx.strokeStyle = '#27ae60'; ctx.lineWidth = 4;
+    pipes.forEach(p=>{
+      ctx.beginPath(); ctx.rect(p.x,0,pipeW,p.gapY); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.rect(p.x,p.gapY+gap,pipeW,H-(p.gapY+gap)); ctx.fill(); ctx.stroke();
       ctx.fillStyle = '#25b35f';
-      ctx.fillRect(p.x-3, p.gapY-16, pipeW+6, 16);
-      ctx.fillRect(p.x-3, p.gapY+gap, pipeW+6, 16);
+      ctx.fillRect(p.x-3,p.gapY-16,pipeW+6,16);
+      ctx.fillRect(p.x-3,p.gapY+gap,pipeW+6,16);
       ctx.fillStyle = '#2ecc71';
     });
   }
-
-  function collide() {
+  function collide(){
     if (bird.y + bird.r > H || bird.y - bird.r < 0) return true;
-    for (const p of pipes) {
+    for (const p of pipes){
       const inX = bird.x + bird.r > p.x && bird.x - bird.r < p.x + pipeW;
       const inGap = bird.y - bird.r > p.gapY && bird.y + bird.r < p.gapY + gap;
       if (inX && !inGap) return true;
     }
     return false;
   }
-
   function roundRect(ctx, x, y, w, h, r, fill, stroke){
     if (w<2*r) r=w/2; if (h<2*r) r=h/2;
     ctx.beginPath();
@@ -319,136 +273,75 @@
     ctx.arcTo(x,y,x+w,y,r);
     if (fill) ctx.fill(); if (stroke) ctx.stroke();
   }
-
-  // Input
   function flap(){ bird.vy = bird.jumpV; }
   cvs.addEventListener('pointerdown', flap);
-  window.addEventListener('keydown', e => { if (e.code==='Space' || e.code==='ArrowUp') flap(); });
+  window.addEventListener('keydown', e => { if (e.code==='Space'||e.code==='ArrowUp') flap(); });
 
-  // Main loop (delta-time + speed multiplier)
   let lastT = performance.now();
   function loop(now){
     const rawDt = now - lastT; lastT = now;
-    const dt = Math.min(34, rawDt) * (speedMult || 1); // clamp & speed hack
+    const dt = Math.min(34, rawDt) * speedMult;
     ctx.clearRect(0,0,W,H);
-
-    // Background ground
-    const groundH = 60;
-    ctx.fillStyle = '#87CEEB22'; ctx.fillRect(0,H-groundH,W,groundH);
-    ctx.fillStyle = '#4f772d'; ctx.fillRect(0,H-groundH+8,W,groundH-8);
-
-    // Spawn pipes
+    ctx.fillStyle = '#87CEEB22'; ctx.fillRect(0,H-60,W,60);
+    ctx.fillStyle = '#4f772d'; ctx.fillRect(0,H-52,W,52);
     lastSpawn += dt;
-    const spawnMs = spawnEveryMs / (speedMult || 1);
+    const spawnMs = spawnEveryMs / speedMult;
     if (lastSpawn >= spawnMs) { lastSpawn = 0; spawnPipe(); }
-
-    // Update bird
     bird.vy += bird.gravity * (dt/16);
     bird.y  += bird.vy     * (dt/16);
-
-    // Update pipes
-    const px = basePipeSpeed * (dt/1); // already scaled by dt
+    const px = basePipeSpeed * (dt/1);
     for (const p of pipes){ p.x -= px; }
     while (pipes.length && pipes[0].x + pipeW < 0) pipes.shift();
-
-    // Score
     for (const p of pipes){
       if (!p.passed && p.x + pipeW < bird.x - bird.r){
-        p.passed = true; score++; 
-        document.getElementById('score').textContent = score;
+        p.passed = true; score++; document.getElementById('score').textContent = score;
       }
     }
-
-    // Draw
-    drawPipes();
-    drawBird();
-
-    // Collision / reset
+    drawPipes(); drawBird();
     if (collide()){
-      running = false;
-      best = Math.max(best, score);
+      running = false; best = Math.max(best, score);
       localStorage.setItem('fb_best', best);
       document.getElementById('best').textContent = best;
-      // flash effect
-      ctx.fillStyle = 'rgba(255,0,0,.25)';
-      ctx.fillRect(0,0,W,H);
+      ctx.fillStyle = 'rgba(255,0,0,.25)'; ctx.fillRect(0,0,W,H);
       setTimeout(resetGame, 500);
       lastT = performance.now();
     }
-
     if (running) requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
 
-  /* ========= Hack Menu logic ========= */
-  const btn = document.getElementById('hackBtn');
-  const menu = document.getElementById('menu');
-  const chips = [...document.querySelectorAll('.chip')];
-  const antibanBtn = document.getElementById('antibanBtn');
-  const bar = document.getElementById('barFill');
-
-  btn.addEventListener('click', () => {
-    menu.classList.toggle('show');
-  });
-
+  const chips = document.querySelectorAll('.chip');
+  const speedLabelElm = document.getElementById('spdlabel');
   chips.forEach(ch => {
     ch.addEventListener('click', () => {
-      chips.forEach(c => c.classList.remove('active'));
+      chips.forEach(c=>c.classList.remove('active'));
       ch.classList.add('active');
       speedMult = +ch.dataset.speed || 1;
-      speedLabel.textContent = speedMult + '×';
+      speedLabelElm.textContent = speedMult + '×';
     });
   });
 
+  const antibanBtn = document.getElementById('antibanBtn');
+  const bar = document.getElementById('barFill');
   antibanBtn.addEventListener('click', () => {
-    // Visual-only: 1.8s progress
     antibanBtn.textContent = 'Đang kích hoạt...';
-    antibanBtn.setAttribute('disabled','');
+    antibanBtn.disabled = true;
     bar.style.transition = 'width 1.8s linear';
     bar.style.width = '100%';
     setTimeout(() => {
       antibanBtn.textContent = 'Đã bảo vệ ✓';
       setTimeout(() => {
-        // reset bar slowly fade out, then ready again
         bar.style.transition = 'width .4s ease';
         bar.style.width = '0%';
-        antibanBtn.removeAttribute('disabled');
+        antibanBtn.disabled = false;
         antibanBtn.textContent = 'Bật Antiban';
-      }, 20000); // giữ trạng thái đã bật 20s (minh họa)
+      }, 20000);
     }, 1800);
   });
 
-  /* ========= Make the menu draggable (stays on screen) ========= */
-  const dragHandle = document.getElementById('menuDrag');
-  const shell = document.getElementById('menu');
-  let drag = null;
-
-  function clamp(val, min, max){ return Math.max(min, Math.min(max, val)); }
-
-  dragHandle.addEventListener('pointerdown', (e) => {
-    dragHandle.setPointerCapture(e.pointerId);
-    const rect = shell.getBoundingClientRect();
-    drag = {
-      sx: e.clientX, sy: e.clientY,
-      ox: rect.left, oy: rect.top
-    };
+  document.getElementById('hackBtn').addEventListener('click',()=>{
+    document.getElementById('menu').classList.toggle('show');
   });
-  dragHandle.addEventListener('pointermove', (e) => {
-    if (!drag) return;
-    const dx = e.clientX - drag.sx;
-    const dy = e.clientY - drag.sy;
-    const nx = drag.ox + dx;
-    const ny = drag.oy + dy;
-    // clamp in viewport
-    const vw = window.innerWidth, vh = window.innerHeight;
-    const w = shell.offsetWidth, h = shell.offsetHeight;
-    shell.style.left = clamp(nx, 6, vw - w - 6) + 'px';
-    shell.style.top  = clamp(ny, 6, vh - h - 6) + 'px';
-    shell.style.right = 'auto';
-    shell.style.bottom = 'auto';
-  });
-  dragHandle.addEventListener('pointerup', () => { drag = null; });
-
 })();
 </script>
 </body>
