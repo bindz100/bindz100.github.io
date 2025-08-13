@@ -1,348 +1,189 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-<title>Flappy Birch + Hack Menu</title>
+<meta charset="UTF-8">
+<title>Flappy VIP</title>
 <style>
-  :root{
-    --menu-radius:16px;
-    --glass-bg:rgba(255,255,255,0.10);
-    --glass-stroke:rgba(255,255,255,0.35);
-    --shadow: 0 10px 30px rgba(0,0,0,.35);
-  }
-  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
-  html,body{height:100%;margin:0;background:#0b0e14;color:#fff;font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;overflow:hidden;}
-  .wrap{
-    position:relative;
-    width:100%;
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:10px;
-  }
-
-  /* Game area */
-  #game{
-    width:360px; height:640px; max-width:95vw; max-height:88vh;
-    background: linear-gradient(180deg,#6dd5fa 0%,#2980b9 60%, #145374 100%);
-    border-radius:18px;
-    box-shadow: var(--shadow);
-  }
-  .hud{
-    position:absolute; top:12px; left:50%; transform:translateX(-50%);
-    font-weight:700; font-size:24px; text-shadow:0 2px 6px rgba(0,0,0,.4);
-    letter-spacing:1px;
-    user-select:none;
-  }
-  .subhud{
-    position:absolute; top:12px; right:14px; font-size:12px; opacity:.8;
-    text-align:right; line-height:1.2;
-  }
-
-  /* Floating cat meme button */
-  .hack-btn{
-    position:fixed; right:14px; bottom:16px; z-index:50;
-    width:58px; height:58px; border-radius:50%;
-    display:grid; place-items:center;
-    background:
-      radial-gradient(60% 60% at 30% 30%, rgba(255,255,255,.35), transparent 60%),
-      linear-gradient(135deg,#141e30,#243b55);
-    border:2px solid rgba(255,255,255,.35);
-    box-shadow: 0 10px 20px rgba(0,0,0,.45), inset 0 0 10px rgba(255,255,255,.08);
-    cursor:pointer;
-    user-select:none;
-    overflow:hidden;
-  }
-  .hack-btn img{
-    width:70%; height:70%; object-fit:cover; border-radius:50%;
-  }
-  .hack-btn:active{ transform: translateY(1px) scale(.98); }
-
-  /* Hack menu (rainbow border) */
-  .menu-shell{
-    position:fixed; right:10px; bottom:90px; z-index:60; display:none;
-  }
-  .menu-rainbow{
-    position:relative;
-    padding:2px; border-radius: var(--menu-radius);
-    background:
-      conic-gradient(from 0deg,
-      #ff0066, #ff7a00, #ffee00, #39ff14, #00f5ff, #5866ff, #b400ff, #ff0066);
-    animation: spin 6s linear infinite;
-  }
-  @keyframes spin{ to{ background-position: 360deg; transform: rotate(360deg); } }
-
-  .menu-card{
-    position:relative;
-    width: 280px; max-width: 88vw;
-    border-radius: calc(var(--menu-radius) - 2px);
-    background:
-      radial-gradient(120% 80% at 10% 0%, rgba(255,255,255,.20), transparent 60%),
-      radial-gradient(120% 100% at 100% 100%, rgba(255,255,255,.10), transparent 60%),
-      linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border:1px solid var(--glass-stroke);
-    box-shadow: var(--shadow);
-    overflow:hidden;
-  }
-  .menu-head{
-    display:flex; align-items:center; gap:8px; padding:10px 12px;
-    background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,0));
-    cursor:grab; user-select:none;
-  }
-  .menu-head:active{ cursor:grabbing; }
-  .menu-ico{
-    width:28px; height:28px; border-radius:50%; overflow:hidden;
-    display:grid; place-items:center;
-  }
-  .menu-ico img{
-    width:100%; height:100%; object-fit:cover;
-  }
-  .menu-title{ font-weight:800; letter-spacing:.3px; }
-  .menu-body{ padding:12px; display:grid; gap:12px; }
-
-  .group-title{ font-size:12px; opacity:.8; letter-spacing:.4px; text-transform:uppercase; }
-  .speed-row{ display:flex; gap:8px; }
-  .chip{
-    flex:1; padding:10px 0; border-radius:12px; font-weight:700;
-    text-align:center; cursor:pointer; user-select:none;
-    background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
-    border:1px solid rgba(255,255,255,.35);
-    box-shadow: inset 0 0 10px rgba(255,255,255,.06);
-    transition: transform .08s ease;
-  }
-  .chip:active{ transform:translateY(1px) scale(.98); }
-  .chip.active{
-    outline:2px solid rgba(255,255,255,.8);
-    background: linear-gradient(180deg, rgba(255,255,255,.25), rgba(255,255,255,.08));
-  }
-
-  .antiban{
-    display:grid; gap:8px;
-  }
-  .btn{
-    padding:12px; border-radius:12px; text-align:center; font-weight:800; cursor:pointer;
-    background: linear-gradient(180deg, #00f5ff44, #5866ff44);
-    border:1px solid rgba(255,255,255,.45);
-    box-shadow: inset 0 0 14px rgba(255,255,255,.10), 0 8px 18px rgba(0,0,0,.35);
-    transition: transform .08s ease, filter .2s ease;
-    user-select:none;
-  }
-  .btn:active{ transform: translateY(1px) scale(.99); }
-  .btn[disabled]{ opacity:.6; pointer-events:none; filter: grayscale(.3); }
-
-  .bar{
-    width:100%; height:10px; border-radius:999px; overflow:hidden;
-    background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.35);
-  }
-  .bar > i{
-    display:block; height:100%; width:0%;
-    background: linear-gradient(90deg,#32d1ff,#7a8cff,#cc66ff);
-    box-shadow: inset 0 0 8px rgba(255,255,255,.35);
-    transition: width .2s linear;
-  }
-
-  .menu-foot{
-    font-size:11px; opacity:.75; padding:0 12px 12px 12px; text-align:center;
-  }
-
-  .menu-shell.show{ display:block; }
-
-  .ver{
-    position:fixed; left:10px; bottom:10px; opacity:.4; font-size:11px;
-    letter-spacing:.4px; z-index:1;
-  }
+    body {
+        margin: 0;
+        overflow: hidden;
+        background: linear-gradient(to bottom, #70c5ce, #fff);
+        font-family: Arial, sans-serif;
+    }
+    canvas {
+        display: block;
+        margin: 0 auto;
+        background: #70c5ce;
+    }
+    /* Nút mở menu */
+    #menuBtn {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjltzX_PNVIeWxq_6aQEkw4WVMWpAcg9SthKlM27fKdQ&s');
+        background-size: cover;
+        background-position: center;
+        cursor: pointer;
+        border: 2px solid white;
+        z-index: 999;
+    }
+    /* Menu hack */
+    #hackMenu {
+        position: fixed;
+        top: 80px;
+        left: 20px;
+        background: rgba(0,0,0,0.8);
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        display: none;
+        animation: rainbow-border 3s linear infinite;
+        border: 3px solid;
+    }
+    @keyframes rainbow-border {
+        0% { border-color: red; }
+        16% { border-color: orange; }
+        33% { border-color: yellow; }
+        50% { border-color: green; }
+        66% { border-color: blue; }
+        83% { border-color: indigo; }
+        100% { border-color: violet; }
+    }
+    .btn {
+        background: #444;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        margin: 5px 0;
+        cursor: pointer;
+        border-radius: 5px;
+        width: 100%;
+    }
+    .loading-bar {
+        height: 8px;
+        background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+        background-size: 200% 100%;
+        animation: loadingMove 1.8s linear forwards;
+        border-radius: 4px;
+        margin-top: 5px;
+    }
+    @keyframes loadingMove {
+        from { width: 0%; background-position: 0 0; }
+        to { width: 100%; background-position: 200% 0; }
+    }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <canvas id="game" width="360" height="640"></canvas>
-    <div class="hud" id="score">0</div>
-    <div class="subhud">
-      <div>Best: <span id="best">0</span></div>
-      <div>Tốc độ: <span id="spdlabel">1×</span></div>
+
+<canvas id="gameCanvas" width="320" height="480"></canvas>
+
+<div id="menuBtn"></div>
+<div id="hackMenu">
+    <div>
+        <label>Tốc độ:</label>
+        <select id="speedSelect" class="btn">
+            <option value="1">1 (Bình thường)</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
     </div>
-  </div>
-
-  <button class="hack-btn" id="hackBtn">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjltzX_PNVIeWxq_6aQEkw4WVMWpAcg9SthKlM27fKdQ&s" alt="cat">
-  </button>
-
-  <div class="menu-shell" id="menu">
-    <div class="menu-rainbow">
-      <div class="menu-card" id="menuCard">
-        <div class="menu-head" id="menuDrag">
-          <div class="menu-ico"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjltzX_PNVIeWxq_6aQEkw4WVMWpAcg9SthKlM27fKdQ&s"></div>
-          <div class="menu-title">Birch Hack Menu</div>
-        </div>
-        <div class="menu-body">
-          <div>
-            <div class="group-title">Tốc độ</div>
-            <div class="speed-row">
-              <div class="chip active" data-speed="1">1×</div>
-              <div class="chip" data-speed="2">2×</div>
-              <div class="chip" data-speed="3">3×</div>
-            </div>
-          </div>
-          <div class="antiban">
-            <div class="group-title">Antiban</div>
-            <button class="btn" id="antibanBtn">Bật Antiban</button>
-            <div class="bar"><i id="barFill"></i></div>
-          </div>
-        </div>
-        <div class="menu-foot">Viền rainbow kiểu Samsung ✨</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="ver">Flappy Birch v1.0</div>
+    <button id="antibanBtn" class="btn">Antiban</button>
+    <div id="loadingContainer"></div>
+</div>
 
 <script>
-(() => {
-  const cvs = document.getElementById('game');
-  const ctx = cvs.getContext('2d');
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
 
-  const W = cvs.width, H = cvs.height;
-  let running = true;
-  let score = 0, best = +localStorage.getItem('fb_best') || 0;
-  document.getElementById('best').textContent = best;
+    let frames = 0;
+    const DEGREE = Math.PI/180;
+    let gameSpeed = 1;
 
-  let speedMult = 1;
-  const speedLabel = document.getElementById('spdlabel');
+    const bird = {
+        x: 50,
+        y: 150,
+        w: 34,
+        h: 26,
+        gravity: 0.25,
+        jump: 4.6,
+        speed: 0,
+        draw(){
+            ctx.fillStyle = "yellow";
+            ctx.fillRect(this.x, this.y, this.w, this.h);
+        },
+        flap(){
+            this.speed = -this.jump;
+        },
+        update(){
+            this.speed += this.gravity;
+            this.y += this.speed;
+            if (this.y + this.h >= canvas.height) {
+                this.y = canvas.height - this.h;
+                gameOver();
+            }
+        }
+    };
 
-  const bird = { x: W * 0.28, y: H * 0.45, r: 12, vy: 0, gravity: 0.48, jumpV: -7.6 };
-  const pipes = [];
-  const pipeW = 60;
-  let gap = 150;
-  let basePipeSpeed = 2.2;
-  let spawnEveryMs = 1400;
-  let lastSpawn = 0;
+    function gameOver(){
+        cancelAnimationFrame(loop);
+        ctx.fillStyle = "red";
+        ctx.font = "30px Arial";
+        ctx.fillText("GAME OVER", 70, 240);
+    }
 
-  function resetGame(){
-    score = 0; bird.y = H * 0.45; bird.vy = 0;
-    pipes.length = 0; lastSpawn = 0; running = true;
-  }
-  function spawnPipe(){
-    const margin = 70;
-    const gapY = margin + Math.random() * (H - margin*2 - gap);
-    pipes.push({ x: W + pipeW, gapY, passed:false });
-  }
-  function drawBird(){
-    ctx.save(); ctx.translate(bird.x, bird.y);
-    const tilt = Math.max(-0.5, Math.min(0.5, bird.vy/10));
-    ctx.rotate(tilt);
-    const grd = ctx.createLinearGradient(-15,-15, 20, 20);
-    grd.addColorStop(0, '#ffe66d'); grd.addColorStop(1, '#ff9f1c');
-    ctx.fillStyle = grd; roundRect(ctx,-16,-12,32,24,12,true,false);
-    ctx.fillStyle = 'rgba(255,255,255,.9)'; roundRect(ctx,-8,-6,16,12,6,true,false);
-    ctx.beginPath(); ctx.fillStyle='#fff'; ctx.arc(6,-4,4,0,Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.fillStyle='#222'; ctx.arc(7,-4,2,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle = '#ffd166'; roundRect(ctx,14,-2,10,6,3,true,false);
-    ctx.restore();
-  }
-  function drawPipes(){
-    ctx.fillStyle = '#2ecc71'; ctx.strokeStyle = '#27ae60'; ctx.lineWidth = 4;
-    pipes.forEach(p=>{
-      ctx.beginPath(); ctx.rect(p.x,0,pipeW,p.gapY); ctx.fill(); ctx.stroke();
-      ctx.beginPath(); ctx.rect(p.x,p.gapY+gap,pipeW,H-(p.gapY+gap)); ctx.fill(); ctx.stroke();
-      ctx.fillStyle = '#25b35f';
-      ctx.fillRect(p.x-3,p.gapY-16,pipeW+6,16);
-      ctx.fillRect(p.x-3,p.gapY+gap,pipeW+6,16);
-      ctx.fillStyle = '#2ecc71';
+    function draw(){
+        ctx.fillStyle = "#70c5ce";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        bird.draw();
+    }
+
+    function update(){
+        bird.update();
+    }
+
+    function loopGame(){
+        update();
+        draw();
+        frames++;
+        loop = requestAnimationFrame(loopGame);
+    }
+
+    let loop = requestAnimationFrame(loopGame);
+
+    document.addEventListener("keydown", e => {
+        if (e.code === "Space") bird.flap();
     });
-  }
-  function collide(){
-    if (bird.y + bird.r > H || bird.y - bird.r < 0) return true;
-    for (const p of pipes){
-      const inX = bird.x + bird.r > p.x && bird.x - bird.r < p.x + pipeW;
-      const inGap = bird.y - bird.r > p.gapY && bird.y + bird.r < p.gapY + gap;
-      if (inX && !inGap) return true;
-    }
-    return false;
-  }
-  function roundRect(ctx, x, y, w, h, r, fill, stroke){
-    if (w<2*r) r=w/2; if (h<2*r) r=h/2;
-    ctx.beginPath();
-    ctx.moveTo(x+r,y);
-    ctx.arcTo(x+w,y,x+w,y+h,r);
-    ctx.arcTo(x+w,y+h,x,y+h,r);
-    ctx.arcTo(x,y+h,x,y,r);
-    ctx.arcTo(x,y,x+w,y,r);
-    if (fill) ctx.fill(); if (stroke) ctx.stroke();
-  }
-  function flap(){ bird.vy = bird.jumpV; }
-  cvs.addEventListener('pointerdown', flap);
-  window.addEventListener('keydown', e => { if (e.code==='Space'||e.code==='ArrowUp') flap(); });
+    canvas.addEventListener("click", () => bird.flap());
 
-  let lastT = performance.now();
-  function loop(now){
-    const rawDt = now - lastT; lastT = now;
-    const dt = Math.min(34, rawDt) * speedMult;
-    ctx.clearRect(0,0,W,H);
-    ctx.fillStyle = '#87CEEB22'; ctx.fillRect(0,H-60,W,60);
-    ctx.fillStyle = '#4f772d'; ctx.fillRect(0,H-52,W,52);
-    lastSpawn += dt;
-    const spawnMs = spawnEveryMs / speedMult;
-    if (lastSpawn >= spawnMs) { lastSpawn = 0; spawnPipe(); }
-    bird.vy += bird.gravity * (dt/16);
-    bird.y  += bird.vy     * (dt/16);
-    const px = basePipeSpeed * (dt/1);
-    for (const p of pipes){ p.x -= px; }
-    while (pipes.length && pipes[0].x + pipeW < 0) pipes.shift();
-    for (const p of pipes){
-      if (!p.passed && p.x + pipeW < bird.x - bird.r){
-        p.passed = true; score++; document.getElementById('score').textContent = score;
-      }
-    }
-    drawPipes(); drawBird();
-    if (collide()){
-      running = false; best = Math.max(best, score);
-      localStorage.setItem('fb_best', best);
-      document.getElementById('best').textContent = best;
-      ctx.fillStyle = 'rgba(255,0,0,.25)'; ctx.fillRect(0,0,W,H);
-      setTimeout(resetGame, 500);
-      lastT = performance.now();
-    }
-    if (running) requestAnimationFrame(loop);
-  }
-  requestAnimationFrame(loop);
+    // Menu
+    const menuBtn = document.getElementById("menuBtn");
+    const hackMenu = document.getElementById("hackMenu");
+    menuBtn.onclick = () => {
+        hackMenu.style.display = hackMenu.style.display === "block" ? "none" : "block";
+    };
 
-  const chips = document.querySelectorAll('.chip');
-  const speedLabelElm = document.getElementById('spdlabel');
-  chips.forEach(ch => {
-    ch.addEventListener('click', () => {
-      chips.forEach(c=>c.classList.remove('active'));
-      ch.classList.add('active');
-      speedMult = +ch.dataset.speed || 1;
-      speedLabelElm.textContent = speedMult + '×';
-    });
-  });
+    // Speed select
+    document.getElementById("speedSelect").onchange = function(){
+        gameSpeed = Number(this.value);
+        bird.gravity = 0.25 * gameSpeed;
+        bird.jump = 4.6 * gameSpeed;
+    };
 
-  const antibanBtn = document.getElementById('antibanBtn');
-  const bar = document.getElementById('barFill');
-  antibanBtn.addEventListener('click', () => {
-    antibanBtn.textContent = 'Đang kích hoạt...';
-    antibanBtn.disabled = true;
-    bar.style.transition = 'width 1.8s linear';
-    bar.style.width = '100%';
-    setTimeout(() => {
-      antibanBtn.textContent = 'Đã bảo vệ ✓';
-      setTimeout(() => {
-        bar.style.transition = 'width .4s ease';
-        bar.style.width = '0%';
-        antibanBtn.disabled = false;
-        antibanBtn.textContent = 'Bật Antiban';
-      }, 20000);
-    }, 1800);
-  });
-
-  document.getElementById('hackBtn').addEventListener('click',()=>{
-    document.getElementById('menu').classList.toggle('show');
-  });
-})();
+    // Antiban button
+    document.getElementById("antibanBtn").onclick = () => {
+        const loading = document.createElement("div");
+        loading.className = "loading-bar";
+        const container = document.getElementById("loadingContainer");
+        container.innerHTML = "";
+        container.appendChild(loading);
+        setTimeout(() => {
+            container.innerHTML = "<span style='color:lightgreen'>Antiban hoàn tất!</span>";
+        }, 1800);
+    };
 </script>
+
 </body>
 </html>
